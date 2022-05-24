@@ -1,0 +1,60 @@
+<h3>The Registry</h3>
+In the previous sections, we talked about the Buffer and data binding. We also showed how you can split your code and
+load them on demand. All of this works because each element that needs to bind to some state is registered with the
+Registry.
+
+<h4>Dynamic vs Static nodes</h4>
+Nodes on the DOM tree can be considered by Ika as being either <i>static</i> or <i>dynamic</i>. A text node, or a plain
+<code>&lt;div&gt;</code> element, for example, would not be able to bind to a state or trigger callbacks, and are
+therefore considered static. Dynamic nodes could change their properties or attributes based on state change. In both
+component level state binds and inglobal binds, the node that bind to the state is identified by information kept in the
+Registry.<br><br>
+
+The distinction is more easily viewed through understanding Ika's publisher / subscriber pattern. Nodes that bind to
+some state is a subscriber, and subscribers are dynamic nodes for Ika. Or, viewed through the Buffer's perspective, any
+node target of an intended DOM change is a dynamic node.<br><br>
+
+From Ika's point of view, it does not need to worry about nodes that won't change, and we mean nodes, not components.
+Say there's a button that says <code>Pay £x now</code>, and the amount updates based on cart contents. The button itself
+is not a dynamic node - the button's child nodes and its own attributes do not change. The amount does change, as it's
+wrapped up in a <code>&lt;ika-b&gt;</code> node. It is the <code>&lt;ika-b&gt;</code> node that's considered a dynamic
+node, and would have a registration with Ika.
+
+<h4>Identifying nodes</h4>
+To identify nodes easily, each dynamic node is first registered with the registry, and receives a unique node ID string.
+When there is some intended DOM change, and that change is recorded into the Buffer, it is stored under the key that
+corresponds to the node's ID. When another intended DOM change needs to be recorded, Ika can look for a key in the
+Buffer that matches the node's ID, instead of traversing through some array to find an identical node. <br><br>
+
+Ika also uses this ID to register callbacks in bindings. When a binding changes, all registered callbacks are invoked.
+However, if a node is removed, the callback should be unregistered. For Ika to know which callback to remove, each
+callback record is registered with a node ID.<br><br>
+
+<h4>Registering and deregistering nodes</h4>
+Components created though Ika and the core custom components provided by Ika automatically register themselves when
+initialised.
+
+Ika will deregister disconnected nodes in two ways. Invocations associated with a particular registered node could
+happen in the following places:
+<ul>
+    <li>
+        Global bind callbacks held by the <code>#binds</code> object inside a <code>IkaRegistry</code> instance
+    </li>
+    <li>
+        Component level bind callbacks held by the <code>#binds</code> object inside a <code>IkaComponent</code>
+    </li>
+    <li>
+        Intended DOM changes inside the <code>#buffer</code> object inside a <code>Buffer</code> instance
+    </li>
+</ul>
+
+At invocation, node IDs will be checked against their associated node's <code>isConnected</code> property. If the node
+is no longer connected, the node with that node ID will be deregistered from the Registry. However, deregistration in
+the Registry is not broadcast. It is up to each implementation to remove the node from their subscribers.
+
+<code>ika.reg</code> method <code>subscribeToBind()</code>, <code>setBindValue()</code>
+
+<code>IkaComponent</code> methods <code>registerCbForStateBind</code>, <code>deregisterCbForStateBind</code>
+<code>BindingComponent</code> methods <code>onParentComponentLoaded()</code> to establish chain, and
+<code>registerBind()</code> and <code>deregisterBind()</code>
+<code>IkaBuffer</code> to identify any node that needs to be updated.

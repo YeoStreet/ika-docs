@@ -1,0 +1,126 @@
+<ika:templates>
+    <template id="product-card">
+        <style>
+            .title {
+                font-weight: 600;
+                font-size: 1.15rem;
+                margin: 0.5rem;
+            }
+
+            .container {
+                padding: 0.5rem;
+                margin: 0.5rem 0;
+                background: white;
+                border: 1px solid #ddd;
+            }
+        </style>
+        <span class="title">
+            <slot name="name">Default</slot>
+        </span>
+        <div class="container">
+            <variant-display>
+                <slot name="price" slot="price"></slot>
+                <slot name="size" slot="size"></slot>
+            </variant-display>
+        </div>
+    </template>
+    <template id="variant-display">
+        <style>
+            .spacing {
+                margin: 0.5rem;
+                padding: 0.25rem
+            }
+
+            .price {
+                background: #aaa;
+                border-radius: 5px;
+            }
+
+            .size {
+                background: aquamarine;
+            }
+        </style>
+        <span class="price spacing">
+            <slot name="price"></slot>
+        </span>
+        <span class="size spacing">
+            <slot name="size"></slot>
+        </span>
+    </template>
+</ika:templates>
+
+<h3>
+    This section demonstrates how you can map data to custom components.
+</h3>
+
+<div>
+    Let's say we have a product catalogue of three products. The JSON data for them would be
+    <div class="code">
+        <pre class="code" style="margin: 0">[
+    { name: 'Product #1', price: 100, size: 'S' },
+    { name: 'Product #2', price: 200, size: 'M' },
+    { name: 'Product #3', price: 300, size: 'L' }
+]</pre>
+    </div>
+    To display them, we want a product card component to take in this data and format accordingly. We define a
+    <code>&lt;product-card&gt;</code> component by first creating a template. <br><br>
+    We would also like the price and size data to be displayed in a <code>&lt;variant-display&gt;</code> component, so
+    that we might use it later outside this context. We will also create a template for this component. <br><br>
+
+    Our <code>&lt;variant-display&gt;</code> looks like this, with two slots named <code>price</code> and
+    <code>size</code>.
+    <div style="margin: 1rem 0.5rem">
+        <variant-display>
+            <n slot="price">100</n>
+            <n slot="size">L</n>
+        </variant-display>
+
+    </div>
+
+    Our <code>&lt;product-card&gt;</code> component wraps around this, and looks like this
+    <div style="margin: 1rem 0.5rem">
+        <product-card>
+            <n slot="name">My Product</n>
+            <n slot="price">100</n>
+            <n slot="size">L</n>
+        </product-card>
+    </div>
+
+    To map our dataset, in the form of an array of JSON object literals, we make use of the <code>&lt;ika-me&gt;</code>
+    component. In our bundled data in Javascript, we provided the JSON data under the key <code>productData</code>. The
+    code to map our component over the dataset looks like
+    <div class="code">
+        <code>&lt;ika-me ika:is="productCards" cn="product-card" mf="productData"&gt;&lt;/ika-me&gt;</code>
+    </div>
+
+    <b>NEEDS UPDATE</b>
+
+    The <code>&lt;ika-me&gt;</code> is a pre-defined custom component included with Ika. It will take the component name
+    you want to map the data over as the <code>cn</code> attribute, and the data itself from the <code>mf</code>
+    attribute.<br><br>
+
+    <code>&lt;ika-me&gt;</code> will populate its child nodes when it is instantiated, and will produce the following
+    result.<br><br>
+    <ika-me ika:is="productCards" cn="product-card" mf="productData"></ika-me>
+</div>
+
+
+<script type="module">
+    import { ika } from '../ika/ika.js'
+
+    ika.reg.setBindValue('ika-me:productCards', {
+        productData: [
+            { name: 'Product #1', price: 100, size: 'S' },
+            { name: 'Product #2', price: 200, size: 'M' },
+            { name: 'Product #3', price: 300, size: 'L' }
+        ],
+    })
+
+</script>
+
+<script>
+    import { createIkaComponent } from '../ika/ika.js'
+
+    createIkaComponent('variant-display')
+    createIkaComponent('product-card')
+</script>

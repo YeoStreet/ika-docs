@@ -1,0 +1,89 @@
+* {
+    font-family: "IBM Plex Sans", sans-serif;
+    --theme-primary: #ffab03;
+    --theme-primary-lighter: #fff8eb;
+    --theme-code: #eee
+}
+
+body {
+    margin: 0;
+}
+
+p {
+    font-size: 0.875rem;
+    line-height: 1.75;
+}
+
+.separator {
+    background: var(--theme-primary);
+    margin: 1rem
+}
+
+code,
+.code {
+    font-family: monospace;
+    background: var(--theme-code);
+    padding: 0.15rem 0.25rem;
+    border-radius: 4px;
+}
+
+div.code {
+    border: 1px solid #999;
+    border-radius: 3px;
+    background: var(--theme-code);
+    padding: 0.5rem 1rem;
+    margin: 1rem 0.5rem;
+    font-size: 0.875rem;
+}
+
+.container {
+    background: #fafafa;
+    padding: 1rem 1rem 2rem
+}
+
+.section {
+    margin: 1rem 0;
+    padding: 1rem;
+    border: 1px solid #aaa;
+    background: white;
+    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+}
+
+.aside {
+    background: rgb(239, 241, 229);
+    padding: 0.5rem;
+    margin: 1rem;
+    font-size: 0.875rem;
+    border: 1px solid rgb(179, 180, 136);
+    border-radius: 5px;
+}
+
+.main {
+    display: grid;
+    grid-auto-flow: column;
+    grid-template-columns: max-content max-content auto;
+}
+
+nav {
+    display: grid;
+    grid-auto-flow: row;
+    margin: 1rem 0;
+}
+
+.navLink {
+    font-weight: 600;
+    display: flex;
+    padding: 0.5rem;
+    margin: 0.5rem;
+    transition: all 0.5s;
+    border-radius: 0;
+    border: 1px solid #00000000;
+    cursor: pointer;
+}
+
+.navLink:hover {
+    background: var(--theme-primary-lighter);
+    border-radius: 3px;
+    border-color: #00000020
+}

@@ -1,0 +1,54 @@
+<h3>Introduction</h3>
+What is Ika? With Ika, the simplist working example would be <code>Hello world!</code>. The result is predictably:
+
+<div class="section">Hello world!</div>
+
+What does that mean? It means Ika is not an all encompassing, strongly opinionated way to create web pages and web apps.
+It means Ika is only there when it adds value, and not needed if it doesn't. The name gives a clue:
+
+<div style="text-align: center; font-size: 1.75rem; margin: 1rem">以下</div>
+
+Ika, the name, is based off of this Japanese word, meaning "less". Our overarching philosophy is to reduce the amount of
+scripting involved to make your web page or web app possible. This makes your project more debuggable and
+understandable, and could also make your output package smaller in size.
+
+<h4>Web Components</h4>
+
+Central to how Ika works is Web Components, a web standard widely implemented by all modern browsers. Web Components
+make it possible for you to create encapsulated, reusable components, similar to popular front-end frameworks like
+React and Vue. The difference is, however, that as a web standard, you do not need to load in a JavaScript library file
+for the whole thing to work, or to code in the framework's specific ways. Web Components are cross-framework compatible.
+Read more about them on <a href="https://developer.mozilla.org/en-US/docs/Web/Web_Components">MDN</a>.<br><br>
+
+Web Components exist, however, primarily as a presentation technology, and does not yet include data binding features.
+Ika provides the tools that fill that gap. It will allow you to give your Components persisted states, allow data
+bindings, and more complex interaction logic.<br><br>
+
+Ika also provides additional, optional, "quality-of-life" components that makes it easier to get what you want onto the
+screen, like mapping a data set onto HTML elements, instead of having to write each of them out in HTML. You can choose
+not to use them at all, or implement your own version instead.
+
+<h4>Main concepts</h4>
+
+Unlike front-end frameworks like React, Ika does not implement a Virtual DOM. This doesn't mean, however, that Ika will
+write every UI change directly to the DOM and cause a reflow. Instead, Ika implements what we call a <b>Buffer</b>,
+which will hold information on intended changes to the DOM.<br><br>
+
+Central to the Buffer model is what we call <b>UPS</b>, or <i>updates per second</i>. If you are a gamer, then this is
+equivalent to FPS. The idea here is that if a human user can only perceive a certain number of changes per second,
+there's no need to update the DOM more frequently than that, even if the DOM at some points in time is out of sync with
+what it should look like.<br><br>
+
+The Buffer keeps a list of all intended DOM changes in between update <b>ticks</b>. On each tick, Ika will process the
+Buffer and work out what DOM changes need to be made at that point in time.
+
+<h4>What's next</h4>
+
+We'll assume you already have background knowledge on how web components work, as well as long established technologies
+like CSS and JavaScript. Ika aims to use web standards wherever possible, so you should know how to create a basic web
+page using plain HTML, CSS, and JavaScript. <br><br>
+
+If you are already familiar with another front-end framework, some core concepts like prop passing or what a "state" is
+could be inappropriate to how Ika works. <br><br>
+
+In the next sections, we'll show you how to bind DOM elements to states of your custom component.

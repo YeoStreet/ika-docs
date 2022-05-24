@@ -1,0 +1,222 @@
+<ika:templates>
+    <template id="hello-world">
+        <style>
+            button {
+                background: #666;
+                color: #fff;
+                cursor: pointer;
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+                transition: all 0.2s;
+                border-radius: 3px;
+                border-width: 0px;
+            }
+
+            button:hover {
+                background: var(--theme-primary);
+                transform: translateY(-2px);
+                box-shadow: 0px 3px 5px 0 #00000022;
+            }
+        </style>
+        Hello <slot name="greet"></slot>!
+        <div>
+            <button ika:bf data-click="set">Change state to
+                "David"</button>
+        </div>
+    </template>
+    <template id="change-colour">
+        <style>
+            button {
+                background: #666;
+                color: #fff;
+                cursor: pointer;
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+                transition: all 0.2s;
+                border-radius: 3px;
+                border-width: 0px;
+            }
+
+            button:hover {
+                background: var(--theme-primary);
+                transform: translateY(-2px);
+                box-shadow: 0px 3px 5px 0 #00000022;
+            }
+
+            .bold {
+                font-weight: 600;
+            }
+
+            .colourful {
+                color: var(--theme-primary)
+            }
+        </style>
+        <ika-ab data-class="classString">
+            <p>Click the button to change my colour!</p>
+            <div style="border: 1px solid #ccc">And mine too!</div>
+        </ika-ab>
+        <p>
+            The current colour is <ika-b b="classString"></ika-b>
+        </p>
+        <div>
+            <button ika:bf data-click="changeColour">Change Colour</button>
+        </div>
+    </template>
+</ika:templates>
+
+<div>
+    <h3>Binding Basics</h3>
+    All UI changes based on an event, whether that's data mutation or UI interaction, lead to some change in the
+    DOM.
+    These DOM mutations could be the addition or removal of nodes in the DOM tree, or changes to a node's
+    properties. or
+    in the event the node is an <i>HTMLElement</i>, changes to its attributes.<br><br>
+    Since HTML code itself cannot easily specify front-end logic, we need some way to mark parts of the document to
+    be
+    bound to the value of some variable. In Ika, we provide three building blocks to allow these data driven DOM
+    mutations to be expressed:
+    <ol>
+        <li type="1">
+            Use <code>&lt;ika-b&gt;</code> for changes to existing elements' child nodes. The
+            <code>textContent</code> of this element will bind directly to some variable.
+        </li>
+        <li type="1">
+            Use <code>&lt;ika-ab&gt;</code> to modify attributes of nodes, including standard HTML elements. This binds
+            the properties of child nodes inside the element to the value of some variable, changing its behaviour or
+            appearance.
+        </li>
+        <li type="1">
+            Use <code>&lt;ika-sdc&gt;</code> to render different templates. Compared to the fine-grained approach of
+            the two previous methods, this approach conditionally binds different node trees to the value of a variable.
+        </li>
+    </ol>
+    As you can see by the '-' in their tag names, each of these is a Web Component. They will be explored further in
+    examples. We also need to bind events to some logic, e.g. a button press. This is handled in two parts:
+    <ol>
+        <li type="1">
+            The element that originates the event adds the <code>ika:bf</code> attribute to signal a function binding.
+            Its data attributes signal to its component parent what function it wishes to execute on what events.
+        </li>
+        <li type="1">
+            The component parent captures the bubbled event, stops its propagation, looks for the requested function
+            in the bundled functions object, within the component's namespace, and executes it.
+        </li>
+    </ol>
+</div>
+
+<div>
+    <h4>Binding to variables with &lt;ika-b&gt;</h4>
+
+    To output the value of some variable as a string in the DOM is simple. Use <code>&lt;ika-b&gt;</code> with the
+    attribute <code>b</code> to indicate to Ika which variable you want the <code>textContent</code> to bind to.
+    <br><br>
+
+    An example below shows the component <code>&lt;hello-world&gt;</code>. In its implementation, an
+    <code>&lt;ika-b&gt;</code> is slotted into the named slot <code>greet</code>, with a binding expressed through
+    the attribute <code>b</code> on an internal state called <code>who</code>, which was initialised with value
+    <code>world</code>.
+
+    <div class="section">
+        <hello-world>
+            <ika-b b="who" slot="greet"></ika-b>
+        </hello-world>
+    </div>
+
+    You can click on the button to change the internal state <code>who</code> to <code>David</code>, and see this is
+    reflected in the DOM. We'll cover how function bindings and states work later. For now, the code for this
+    <code>&lt;hello-world&gt;</code> component looks like this:
+
+    <div class="code">
+        <pre style="margin: 0">&lt;template id="hello-world"&gt;
+        Hello &lt;slot name="greet">&lt;/slot&gt;!
+&lt;/template&gt;
+&lt;hello-world&gt;
+    &lt;ika-b b="who" slot="greet">&lt;/ika-b&gt;
+&lt;/hello-world&gt;</pre>
+    </div>
+
+    You'll also need to create <code>&lt;hello-world&gt;</code> as a component through Ika to tap into states and other
+    features. That is done with the following JavaScript code, which can be placed inside a <code>&lt;script&gt;</code>
+    tag or loaded in from a separate file.
+    <div class="code">
+        import { createIkaComponent } from Ika;<br><br>
+        createIkaComponent('hello-world');
+    </div>
+</div>
+
+<div>
+    <h4>Binding attributes to variables with &lt;ika-ab&gt;</h4>
+    Like <code>&lt;ika-b&gt;</code>, <code>&lt;ika-ab&gt;</code> modifies its nodes based on state changes. Unlike
+    <code>&lt;ika-b&gt;</code>, it will not write the binding as <code>textContent</code> as its child node, but
+    instead apply the value as attributes to its child elements. <br><br>
+
+    The example below shows how the <code>class</code> attribute is changed. The <code>&lt;change-colour&gt;</code>
+    component has a <code>&lt;ika-ab&gt;</code> component wrapping around two child elements, <code>&lt;p&gt;</code>
+    and <code>&lt;div&gt;</code>. When the button is clicked, the internal state <code>classString</code> is changed to
+    <code>"bold colourful"</code>, which are then applied to each of the two child elements' <code>class</code>
+    attribute.
+
+    <div class="section">
+        <div style="max-width: 20rem">
+            <change-colour></change-colour>
+        </div>
+    </div>
+
+    The binding is achieved in <code>&lt;ika-ab&gt;</code> by specifying the data attribute <code>data-class</code>.
+    The <code>data-*</code> format indicates to Ika what attribute you want to affect, and the value of that data
+    attribute specifies the bind variable.<br><br>
+
+    The template code for <code>&lt;change-colour&gt;</code> looks like this:
+    <div class='code'>
+        <pre>&lt;template id="change-colour"&gt;
+    &lt;style&gt;
+        .bold { font-weight: 600 }
+        .colourful { color: var(--theme-primary) }
+    &lt;/style&gt;
+
+    &lt;ika-ab data-class="classString"&gt;
+        &lt;p&gt;Click the button to change my colour!&lt;/p&gt;
+        &lt;div style="border: 1px solid #ccc"&gt;And mine too!&lt;/div&gt;
+    &lt;/ika-ab&gt;
+
+    &lt;p&gt;
+        The current colour is &lt;ika-b b="classString"&gt;&lt;/ika-b&gt;
+    &lt;/p&gt;
+
+    &lt;div&gt;
+        &lt;button ika:bf data-click="changeColour"&gt;Change Colour&lt;/button&gt;
+    &lt;/div&gt;
+&lt;/template&gt;</pre>
+    </div>
+
+    You can also bind to multiple variables on multiple attributes using a single <code>&lt;ika-ab&gt;</code>, for
+    example giving it attributes <code>data-class="classString" data-onclick="clickHandlerKey"</code>. <br><br>
+
+    We also added an <code>&lt;ika-b&gt;</code> to bind to <code>classString</code> in this example. You can see the
+    value is output as text inside the <code>&lt;ika-b&gt;</code> when the button is clicked.
+</div>
+<h4>In the next section, we'll explain binding to functions and rendering different node trees based on state.</h4>
+
+<script>
+    import { createIkaComponent, ika } from '../ika/ika.js'
+
+    createIkaComponent("hello-world", {
+        bundle: {
+            "m": {
+                "set": (m, r) => r.setState('who', 'David')
+            },
+            "s": {
+                "_default": { 'who': 'world' },
+            }
+        }
+    })
+    createIkaComponent("change-colour", {
+        bundle: {
+            m: {
+                changeColour: (m, r) => {
+                    r.setState('classString', 'bold colourful')
+                }
+            }
+        }
+    })
+</script>

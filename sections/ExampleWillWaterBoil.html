@@ -1,0 +1,99 @@
+<ika:templates>
+    <template id="temp-input">
+        <fieldset>
+            <legend>Enter the temperature in <ika-b b="label"></ika-b>:</legend>
+            <ika-bf data-input="handleInput">
+                <ika-ab leap=1 data-.value="temperature" context="label">
+                    <input />
+                </ika-ab>
+            </ika-bf>
+        </fieldset>
+    </template>
+
+    <template id="boiling-verdict">
+        The water would <ika-b b="willBoil"></ika-b>boil.
+    </template>
+
+    <template id="will-it-boil">
+        <temp-input ika:is="c"></temp-input>
+        <temp-input ika:is="f"></temp-input>
+        <boiling-verdict ika:b data-temp="tempInKelvin"> </boiling-verdict>
+        The temperature is <ika-b b="tempInKelvin"></ika-b>K.
+    </template>
+</ika:templates>
+
+<div>
+    <will-it-boil></will-it-boil>
+</div>
+
+<script>
+    import { createIkaComponent } from '../ika/ika.js'
+    import { CustomEventTypes, ComponentCall } from '../ika/types/events.js'
+
+    createIkaComponent('temp-input', {
+        bundle: {
+            s: {
+                c: { label: 'Celcius' },
+                f: { label: 'Fahrenheit' }
+            },
+            m: {
+                handleInput: (m, r, e) => {
+                    const evt = new CustomEvent(CustomEventTypes.ComponentCall, {
+                        detail: {
+                            type: ComponentCall.EventType.InvokeFunction,
+                            invocationEvent: e,
+                            key: 'handleInput',
+                            params: r.getAttribute('ika:is')
+                        },
+                        bubbles: true,
+                        cancelable: true,
+                        composed: true
+                    })
+                    r.dispatchEvent(evt)
+                }
+            }
+        }
+    })
+    createIkaComponent('boiling-verdict', {
+        construct: (r) => {
+            r.onStateChange('temp', (c, u) => {
+                c.setState('willBoil', u.v >= 373.15 ? '' : 'not ')
+            })
+        }
+    })
+    createIkaComponent('will-it-boil', {
+        bundle: {
+            s: {
+                _default: {
+                    tempInKelvin: 323.15,
+                    temperature_Celcius: 50,
+                    temperature_Fahrenheit: 122
+                }
+            },
+            m: {
+                handleInput: (m, r, e, p) => {
+                    const sourceInput = e.composedPath()[0]
+                    const input = parseFloat(sourceInput.value);
+
+                    if (Number.isNaN(input)) { return }
+
+                    if (p == 'c') {
+                        r.setState('temperature_Celcius', input)
+                        r.setState('temperature_Fahrenheit', Math.round(1000 * m.toFahrenheit(input)) / 1000)
+                    } else {
+                        r.setState('temperature_Celcius', Math.round(1000 * m.toCelcius(input)) / 1000)
+                        r.setState('temperature_Fahrenheit', input)
+                    }
+
+                    const tempInKelvin = p == 'c'
+                        ? input + 273.15
+                        : Math.round(1000 * m.toCelcius(input)) / 1000 + 273.15
+
+                    r.setState('tempInKelvin', tempInKelvin)
+                },
+                toCelcius: (f) => { return (f - 32) * 5 / 9; },
+                toFahrenheit: (c) => { return c * 9 / 5 + 32 },
+            }
+        }
+    })
+</script>

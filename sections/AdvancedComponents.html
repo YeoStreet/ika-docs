@@ -1,0 +1,21 @@
+<div>
+    <h4>Optional parameters on creating a component</h4>
+
+    When using the <code>createIkaComponent()</code> method, you will always need to pass the component's name as a
+    string in the first parameter. Optionally, you can pass in a second parameter as an object with the following keys:
+    <ul>
+        <li>
+            <code>templateId</code>: Gives a template element ID that is not the default (same as component name).
+        </li>
+        <li>
+            <code>construct</code>: Passes in a function to be executed in the constructor. It will have
+            <code>this</code> bound to the component class.
+        </li>
+        <li>
+            <code>eventBinds</code>: Specifies what events the component will listen to and capture, as an array of
+            strings. All Ika components will listen to and capture <code>click</code> events, as well as Ika
+            internal events that bubble as <code>CustomEvent</code>.
+        </li>
+    </ul>
+    <!-- PROBLEM - CANNOT CHANGE EVENT LISTENERS ON RE-REGISTRATION OF A COMPONENT -->
+</div>

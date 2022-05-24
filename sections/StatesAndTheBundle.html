@@ -1,0 +1,87 @@
+<ika:templates>
+    <template id="hello-world">
+        <style>
+            button {
+                background: #666;
+                color: #fff;
+                cursor: pointer;
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+                transition: all 0.2s;
+                border-radius: 3px;
+                border-width: 0px;
+            }
+
+            button:hover {
+                background: var(--theme-primary);
+                transform: translateY(-2px);
+                box-shadow: 0px 3px 5px 0 #00000022;
+            }
+        </style>
+        Hello <slot name="greet"></slot>!
+        <div>
+            <button ika:bf data-click="set">
+                Change state to "David"
+            </button>
+        </div>
+    </template>
+</ika:templates>
+
+<h3>States and the Bundle</h3>
+In previous sections, our components were able to bind to functions and have initial data loaded. This is not stored in
+the HTML code, but in JavaScript objects that are loaded when the page is loaded.
+
+<div>
+    <h4>State initialisation</h4>
+    <div class="section">
+        <div style="display: grid; grid-template-columns: max-content max-content; gap: 1rem">
+            <hello-world>
+                <ika-b slot="greet" b="who"></ika-b>
+            </hello-world>
+            <hello-world ika:is="example">
+                <ika-b slot="greet" b="who"></ika-b>
+            </hello-world>
+        </div>
+    </div>
+    The first <code>&lt;hello-world&gt;</code> example initalised with the value <code>world</code> for the state
+    <code>who</code>. This is read from a JavaScript object named <code>IKA_INIT_DATA</code>, which has a key
+    <code>hello-world</code>. <br><br>
+
+    Similar to the <code>&lt;ika-sdc&gt;</code> component, this key is equivalent to the
+    <code>cn</code> attribute. The value of this key is an object whos keys are <i>instance spaces</i>, meaning that
+    different instances of the same component can be initalised with different state values. To denote a specific
+    instance space, use the attribute <code>ika:is</code> on the component. If none is specified, Ika will
+    initialise that instance with the values found at key <code>_default</code>.<br><br>
+
+    The second <code>&lt;hello-world&gt;</code> example has the attribute <code>ika:is="example"</code>, and therefore
+    loaded a different initial state. You'll also notice when you click the button, the name is not changed across both
+    <code>&lt;hello-world&gt;</code>, because each instance holds its own states.<br>
+</div>
+
+<div>
+    <h4>Attaching JavaScript methods to components</h4>
+    Our <code>&lt;hello-world&gt;</code> has a very simple JavaScript function, used when the state is changed. That
+    function is also located in the <code>IKA_INIT_DATA</code> object under key <code>hello-world</code>. All publicly
+    accessible methods apart from <code>setState</code> and <code>getState</code> for this component are under the key
+    <code>m</code>. <br><br>
+
+    Note that it's not possible to pass the method a data parameter directly from the element that triggers the DOM
+    event. This is because the function is called at the parent component level when it captures a bubbled event and
+    reads the <code>data-*</code> attribute.
+</div>
+
+<script>
+    import { createIkaComponent } from '../ika/ika.js'
+    createIkaComponent("hello-world", {
+        eventBinds: ['keyup'],
+        bundle: {
+            "m": {
+                "set": (m, r) => r.setState('who', 'David')
+            },
+            "s": {
+                "_default": { 'who': 'world' },
+                "example": { 'who': 'again' }
+            }
+        }
+    })
+</script>

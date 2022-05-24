@@ -1,0 +1,212 @@
+<ika:templates>
+    <template id="hello-world">
+        <style>
+            button {
+                background: #666;
+                color: #fff;
+                cursor: pointer;
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+                transition: all 0.2s;
+                border-radius: 3px;
+                border-width: 0px;
+            }
+
+            button:hover {
+                background: var(--theme-primary);
+                transform: translateY(-2px);
+                box-shadow: 0px 3px 5px 0 #00000022;
+            }
+        </style>
+        Hello <slot name="greet"></slot>!
+        <div>
+            <button ika:bf data-click="set">
+                Change state to "David"
+            </button>
+        </div>
+    </template>
+    <template id="my-timer">
+        <style>
+            button {
+                background: #666;
+                color: #fff;
+                cursor: pointer;
+                margin: 0.5rem 0 0;
+                padding: 0.5rem;
+                transition: all 0.2s;
+                border-radius: 3px;
+                border-width: 0px;
+            }
+
+            button:hover {
+                background: var(--theme-primary);
+                transform: translateY(-2px);
+                box-shadow: 0px 3px 5px 0 #00000022;
+            }
+        </style>
+        <ika-sdc b="status" ts="display"></ika-sdc>
+        <div>
+            <button ika:bf data-click="startTimer">Start Timer</button>
+            <button ika:bf data-click="stopTimer">Stop Timer</button>
+        </div>
+    </template>
+    <ika:sdt cn="my-timer">
+        <ika:stc b="status">
+            <ika:tamc ts="display">
+                <template data-a="on">
+                    <div style="margin: 0.5rem; padding: 0.5rem; background: rgb(225, 255, 236)">
+                        <ika-b b="secondsElapsed"></ika-b> seconds has passed.
+                    </div>
+                </template>
+                <template data-a="off">
+                    <div style="margin: 0.5rem; padding: 0.5rem; background: #999">The timer has been paused.</div>
+                </template>
+            </ika:tamc>
+        </ika:stc>
+    </ika:sdt>
+</ika:templates>
+
+<div>
+    <h3>Advanced Binding</h3>
+    We've already seen examples earlier where an <code>HTMLElement</code> was bound to some Javascript function. Let's
+    dig
+    into how this works. We'll also look at how different templates can be rendered based on states, instead of
+    changing existing elements in the DOM.
+
+    <h4>Binding to functions using the ika:bf attribute</h4>
+
+    Let's bring back the <code>&lt;hello-world&gt;</code> example.
+
+    <div class="section">
+        <hello-world>
+            <ika-b b="who" slot="greet"></ika-b>
+        </hello-world>
+    </div>
+
+    If you inspect the button element, you'll see it looks like <code>&lt;button ika:bf data-click="set"&gt;</code>.
+    The <code>ika:bf</code> attribute marks the element as binding to some function. The <code>data-*</code> attributes
+    indicate what type of event the element wants to bind a function to, and the value indicates what function it wants
+    to be executed for that type of event. In our example, the button is requesting the function <code>set</code> to be
+    executed when the event is <code>click</code>.<br><br>
+
+    The functions available to bind to are included in a bundle object, under the parent component's namespace. You'll
+    see that we aren't using the <code>onclick</code> attribute here. This is because the function the button is
+    requesting is available at the component level, and the button itself doesn't have an easy way of determining what
+    component it's wrapped up in.<br><br>
+
+    To solve this problem, Ika relies on event bubbling. When the button is clicked, it sends off a <code>click</code>
+    event that bubbles up its node tree. The custom component that the button is in will receive this event via an
+    <code>EventListener</code>, stop its propagation, and determine what to do with this event. If it should execute
+    some function, it will check in the bundle, which we'll talk about later.<br>
+
+    <div class="aside">
+        The parent component checks for a function in the <code style="font-size: 0.875rem">IKA_INIT_DATA</code> object,
+        in the component's namespace and under key <code>m</code> for methods, and under the key indicated by the data
+        attribute on the element that triggered the event. If it's found, that function is executed and passed with
+        three parameters: an object with the state setter and getter functions, an object with other methods from the
+        function bundle for this component, and the component reference.<br>
+    </div>
+
+    For our <code>&lt;hello-world&gt;</code>, we'll find this entry in the bundled functions object.
+    <div class="code">
+        <pre>'hello-world': {
+    m: {
+        set: (s, m, r) => r.setState('who', 'David')   
+    }
+}</pre>
+    </div>
+    We are telling the component to use its method <code>setState()</code> to set the state of <code>who</code> to
+    <code>David</code>. This then triggers a callback to the <code>&lt;ika-b&gt;</code> that binds to the state
+    <code>who</code> at the next update tick.
+</div>
+
+<div>
+    <h4>Using <code>&lt;ika-sdc&gt;</code> to conditionally render templates</h4>
+
+    Here, we have an example of a timer that displays different content based on whether it's started or not. When the
+    timer is stopped, it will display a template that says it's stopped. When it starts, a different template
+    with different elements is applied to a subtree inside the component's template.
+    <div class="section">
+        <my-timer></my-timer>
+    </div>
+    This is useful because it doesn't always make sense to make piecemeal styling and binding value changes to render
+    different UI, and you may want to load in a completely different node tree instead. <br><br>
+
+    This is where <code>&lt;ika-sdc&gt;</code> comes in. It stands for <i>State Dependent Container</i>, meaning that it
+    will render different nodes inside itself depending on some state binding.<br><br>
+
+    In our example, the <code>&lt;ika-sdc&gt;</code> has a <code>b</code> attribute with value <code>status</code>. This
+    means how it will select templates to render is bound to the state <code>status</code>. <br><br>
+
+    You'll also see that it has the attribute <code>ts</code>. Before explaining that, let's understand how
+    <code>&lt;ika-sdc&gt;</code> selects what to render. In our <code>&lt;ika:templates&gt;</code> element, we have
+    <code>&lt;template&gt;</code> elements as well as <code>&lt;ika:sdt&gt;</code> elements, which have more special Ika
+    tags nested inside. There's a hierachy here:
+    <ol>
+        <li type="1">
+            <code>&lt;ika:sdt&gt;</code>, or <i>State Dependent Templates</i>: These have a <code>cn</code> attribute
+            (for <i>Component Name</i>) to indicate the nodes inside are relevant for that specific component.
+        </li>
+        <li type="1">
+            <code>&lt;ika:stc&gt;</code>, or <i>State Template Collection</i>: These have a <code>b</code> attribute,
+            identifying its child nodes are relevant for that binding variable.
+        </li>
+        <li type="1">
+            <code>&lt;ika:tamc&gt;</code>, or <i>Template Arm Matching Collection</i>: These have a <code>ts</code>
+            attribute, for <i>template space</i>. This allows multiple SDCs to bind to the same state but render
+            different templates.
+        </li>
+        <li type="1">
+            <code>&lt;template&gt;</code>: These have <code>data-a</code> attribute to mark what state value is the
+            template relevant for. This template is then cloned and attached to the <code>&lt;ika:sdc&gt;</code> in
+            question.</p>
+        </li>
+    </ol>
+
+    So, our <code>&lt;ika-sdc&gt;</code> with binding to <code>status</code> in template space <code>display</code> will
+    look in the <code>&lt;ika:templates&gt;</code> for a child element <code>&lt;ika:sdt cn="my-timer"&gt;</code>, then
+    inside that element, a <code>&lt;ika:stc b="status"&gt;</code>, then inside that, a
+    <code>&lt;ika:tamc ts="display"&gt;</code>, and then finally inside that, a
+    <code>&lt;template data-a="on"&gt;</code> when the component's state <code>status</code> is <code>on</code>.<br><br>
+
+    Note that, like <code>&lt;ika-b&gt;</code>, <code>&lt;ika-sdc&gt;</code> will remove all child nodes when a binding
+    changes, so do not put any content inside these tags in your HTML code.
+</div>
+
+<script>
+    import { createIkaComponent } from '../ika/ika.js'
+    createIkaComponent('hello-world', {
+        bundle: {
+            "m": {
+                "set": (m, r) => r.setState('who', 'David')
+            },
+            "s": {
+                "_default": { 'who': 'world' },
+                "example": { 'who': 'again' }
+            }
+        }
+    })
+    createIkaComponent('my-timer', {
+        bundle: {
+            s: {
+                _default: { 'status': 'off' }
+            },
+            m: {
+                incrementTimer: (m, r) => {
+                    r.setState('secondsElapsed', (r.getState('secondsElapsed') || 0) + 1)
+                },
+                startTimer: (m, r) => {
+                    r.setState('status', 'on')
+                    const timer = setInterval(() => {
+                        m.incrementTimer(m, r);
+                    }, 1000)
+                    r.setState('timerPersist', timer)
+                },
+                stopTimer: (m, r) => {
+                    r.setState('status', 'off')
+                    clearTimeout(r.getState('timerPersist'))
+                }
+            },
+        },
+    })
+</script>

@@ -1,0 +1,149 @@
+<ika:templates>
+    <template id="cart-item">
+        <div>
+            <slot name="name"></slot>, <slot name="size"></slot>, x<slot name="quantity"></slot>
+        </div>
+    </template>
+    <template id="items-container">
+        <style>
+            .container {
+                display: grid;
+                grid-template-columns: max-content auto;
+            }
+        </style>
+        <h4 style="margin: 0">Your cart</h4>
+        <div class="container">
+            <ika-me ika:is="cartDemo" cn="cart-item" mf="cart"></ika-me>
+        </div>
+        <ika-ab data-disabled='buttonDisabled'>
+            <button>Edit quantity</button>
+        </ika-ab>
+    </template>
+    <template id="checkout-pane">
+        <button ika:bf data-click="submitPayment">
+            <ika-b b='buttonText'>
+            </ika-b>
+        </button>
+    </template>
+</ika:templates>
+
+<h3>Global states</h3>
+In previous sections, we showed you how you can use data binding to attach elements to some state. These states were
+held at the component level. However, sometimes you might want different components to communicate with each other
+without going through convoluted parent / child inheritance chains.<br><br>
+
+In other frameworks, one popular solution is the use of a global state management library. Ika has this feature built
+in. In the same way that the component level data binding implements a publisher / subscriber pattern, the global
+bindings implements this model in the Ika Registry object, with a few extra features.
+
+<h4>Binding to a global state</h4>
+
+To illustrate, consider this checkout flow example. When the user clicks "Pay Now", the items in the cart can longer be
+changed. The payment button is in a component called <code>&lt;checkout-pane&gt;</code>, and the cart items are in a
+separate component called <code>&lt;items-container&gt;</code>. Instead of putting both components in one parent
+component and pass the shared state to each, these components can simply bind to a global state.
+
+<div class="section">
+    <div style="display: grid; grid-template-columns: max-content max-content; gap: 1rem; margin: 0rem 1rem">
+        <items-container></items-container>
+        <checkout-pane></checkout-pane>
+    </div>
+</div>
+
+When the "Pay Now" button is pressed, it will change the global state <code>checkoutStage</code> to <code>paying</code>,
+and internal state of <code>&lt;checkout-pane&gt;</code> called <code>buttonText</code> to <code>Processing...</code>.
+The code for that looks like this, in the bundle:
+<div class="code">
+    <pre>submitPayment: (m, r) => {
+    ika.reg.setBindValue('checkoutStage', 'paying', r.getNodeId())
+    r.setState('buttonText', 'Processing...')
+}</pre>
+</div>
+
+Our <code>&lt;items-container&gt;</code> component had already subscribed to the global state <code>checkoutStage</code>
+when it was constructed. This is done by adding a <code>construct</code> function when creating the component through
+Ika. The code looks like this:
+
+<div class="code">
+    <pre>import { createIkaComponent, ika } from Ika;
+
+createIkaComponent('items-container', {
+    construct: (c) => {
+        ika.reg.subscribeToBind(
+            'checkoutStage',
+            c.getNodeId(),
+            (u) => u.v == 'paying' && c.setState("buttonDisabled", true)
+        )
+    }
+})</pre>
+</div>
+
+The <code>construct</code> function we provided takes the component itself as an argument, and binds the the callback to
+changes in the global state <code>checkoutStage</code>. When the value becomes <code>paying</code>, we'll set the
+internal state of <code>&lt;items-container&gt;</code> called <code>buttonDisabled</code> to <code>true</code>. <br><br>
+
+Our button becomes disabled when the state <code>buttonDisabled</code> becomes <code>true</code> because it is wrapped
+in a <code>&lt;ika-ab&gt;</code> component that looks like this:
+<code>&lt;ika-ab data-disabled='buttonDisabled'&gt;&lt;/ika-ab&gt;</code>. The component level data binding changes the
+attribute <code>disabled</code> of child elements of <code>&lt;ika-ab&gt;</code> to the value of the bind variable.
+
+<h4>Binding to global states directly with <code>&lt;ika-b&gt;</code> and <code>&lt;ika-ab&gt;</code></h4>
+
+You can also use <code>&lt;ika-b&gt;</code> and <code>&lt;ika-ab&gt;</code> to bind to a global state directly, instead
+of to a component state. Simply add a <code>global</code> attribute, like
+<code>&lt;ika-b global b="checkoutStage"&gt;&lt;/ika-b&gt;</code>. To demonstrate the global nature of the bind, you can
+see how the example below changes when you press the "Pay Now" button above.
+<div class="section">
+    The current checkout stage is <ika-b global b="checkoutStage"></ika-b>
+</div>
+
+
+<script>
+    import { createIkaComponent, ika } from '../ika/ika.js'
+
+    ika.reg.setBindValue('ika-me:cartDemo', {
+        bd: {
+            "#attr": (d) => {
+                return {
+                    value: d.price * d.quantity,
+                    type: 'number'
+                }
+            }
+        },
+        cart: [
+            { name: 'Product #1', price: 100, size: 'S', quantity: 10 },
+            { name: 'Product #2', price: 200, size: 'M', quantity: 5 },
+            { name: 'Product #3', price: 300, size: 'L', quantity: 1 }
+        ]
+    })
+
+    createIkaComponent('cart-item')
+    createIkaComponent('items-container', {
+        construct: (c) => {
+            ika.reg.registerNode(c, c, subscribeToBind)
+
+            function subscribeToBind(id, n, r) {
+                ika.reg.subscribeToBind(
+                    'checkoutStage',
+                    id,
+                    (u) => u.v == 'paying' && c.setState("buttonDisabled", true)
+                )
+            }
+        }
+    })
+    createIkaComponent('checkout-pane', {
+        bundle: {
+            m: {
+                submitPayment: (m, r) => {
+                    ika.reg.setBindValue('checkoutStage', 'paying', r.getNodeId())
+                    r.setState('buttonText', 'Processing...')
+                }
+            },
+            s: {
+                _default: {
+                    buttonText: 'Pay Now'
+                }
+            }
+        }
+    })
+</script>
