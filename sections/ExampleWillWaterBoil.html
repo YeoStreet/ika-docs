@@ -6,10 +6,6 @@
                 <ika-ab leap=1 data-.value="temperature" context="label">
                     <input />
                 </ika-ab>
-                <ika-bf data-click="debug">
-                    <button leap=1 >Click</button>
-                </ika-bf>
-
             </ika-bf>
         </fieldset>
     </template>
@@ -33,7 +29,7 @@
 <script>
     // import * as T from './ika.js'
     // console.log(T)
-    import { createIkaComponent, CustomEventTypes, ComponentCall, getParentIkaComponent } from 'https://unpkg.com/ikajs@0.1.2/dist/ika.js'
+    import { createIkaComponent, CustomEventTypes, ComponentCall } from 'https://unpkg.com/ikajs@0.1.2/dist/ika.js'
 
     createIkaComponent('temp-input', {
         bundle: {
@@ -55,9 +51,6 @@
                         composed: true
                     })
                     r.dispatchEvent(evt)
-                },
-                debug: (m, r, e, p) => {
-                    getParentIkaComponent(e.composedPath()[0]).then(result => console.log(result))
                 }
             }
         }
