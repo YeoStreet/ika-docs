@@ -106,7 +106,7 @@
 
 
 <script type="module">
-    import { ika } from 'https://unpkg.com/ikajs/dist/ika.js'
+    import { ika } from 'https://unpkg.com/ikajs'
 
     ika.reg.setBindValue('ika-me:productCards', {
         productData: [
@@ -119,7 +119,7 @@
 </script>
 
 <script>
-    import { createIkaComponent } from '../ika.js'
+    import { createIkaComponent } from 'https://unpkg.com/ikajs'
 
     createIkaComponent('variant-display')
     createIkaComponent('product-card')
