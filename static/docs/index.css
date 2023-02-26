@@ -1,0 +1,160 @@
+h1 {
+    font-size: 1.5rem;
+}
+
+.docsContainer {
+    display: flex;
+}
+
+nav h1 {
+    text-transform: lowercase;
+    padding: 0 1rem 0.5rem 0;
+    border-bottom: 2px solid;
+    font: normal 1.5rem var(--default-font);
+}
+
+div.navBg {
+    background: #f8f8f8;
+}
+
+nav {
+    max-width: 400px;
+    padding: 2rem 3rem;
+    display: grid;
+    gap: 0.5rem;
+}
+
+nav ul {
+    display: grid;
+    gap: 1rem;
+}
+
+nav ul li {
+    display: block;
+}
+
+nav ul,
+nav li {
+    margin: 0;
+    padding: 0;
+}
+
+nav ul>li>a {
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s;
+}
+
+nav ul>li>a:hover {
+    color: var(--theme-primary);
+}
+
+body {
+    margin: 0
+}
+
+main {
+    margin: 2rem;
+    border-radius: 5px;
+    background: #f8f8f8;
+    padding: 2rem 3rem;
+    width: 100%;
+    box-shadow: 0 0 10px 0px #00000040;
+}
+
+main p {
+    line-height: 1.5rem;
+}
+
+code {
+    border-radius: 3px;
+    text-align: left;
+    display: inline-block;
+    padding: 1rem;
+    background: var(--theme-secondary);
+    color: var(--theme-secondary-text)
+}
+
+code:not([inline]) {
+    min-width: 300px;
+    max-width: 600px;
+    margin: auto;
+    display: block;
+    overflow: auto;
+}
+
+code pre {
+    margin: 3px
+}
+
+code[inline] {
+    color: #333;
+    padding: 0 0.25rem;
+    background: #e8e8e8;
+    line-height: 1.25rem;
+}
+
+code .comment {
+    color: #5da157
+}
+
+code .ht {
+    color: #a5975b
+}
+
+code .fn,
+code .attr {
+    color: #e6c22f
+}
+
+code .var {
+    color: #73a1cf
+}
+
+code .rk {
+    color: #4c78a3
+}
+
+code .val {
+    color: #6daf7d;
+}
+
+
+main h2 {
+    font: normal 1.25rem var(--default-font);
+    margin: 2rem 0 0;
+    text-transform: uppercase;
+}
+
+div.onwardLinks {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    border-top: 1px solid #00000010;
+    padding: 2rem 0 0;
+}
+
+
+div.onwardLinks>a {
+    background: #f0f0f0;
+    padding: 1.5rem;
+    font-size: 1rem;
+    width: max-content;
+    display: block;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.2s;
+}
+
+div.onwardLinks>a:first-of-type:hover {
+    transform: translateX(3px);
+}
+div.onwardLinks>a:last-of-type:hover {
+    transform: translateX(-3px);
+}
+div.onwardLinks>a:first-of-type{
+    border-right: 1px solid;
+}
+div.onwardLinks>a:last-of-type{
+    border-left: 1px solid;
+}

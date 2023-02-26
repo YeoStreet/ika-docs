@@ -4,100 +4,58 @@
 <head>
     <meta charset="utf-8">
     <title>Ika - create simply.</title>
-    <script src="./ika-config.js"></script>
-    <script defer type="module" src="https://unpkg.com/ikajs"></script>
+    <script type="module" src="./ika.js"></script>
     <link rel="stylesheet" href="styles.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" as="style" onload="this.rel='stylesheet'"
         href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans&display=swap">
+    <script>
+        window.IKA_CONFIG = {
+            UPS: 30,
+            debug: 'global'
+        }
+        window.IKA_ROUTE_CONFIG = {
+            rootKey: 'main',
+            resourceDir: '/static',
+            rules: [
+                { path: '/', res: '/static/home.html' }
+            ]
+        }
+    </script>
+    <style>
+        header {
+            background: #eee;
+            display: block;
+        }
+
+        header a.homeLink {
+            display: inline-block;
+            margin: 0.5rem 1rem;
+            padding: 0.5rem 1rem;
+            font-size: 1.25rem;
+            border: 1px solid transparent;
+            text-decoration: none;
+            color: #333;
+            box-sizing: border-box;
+            transition: border 0.1s;
+        }
+
+        header a.homeLink:hover {
+            border: 1px solid #333;
+        }
+    </style>
 </head>
 
-<ika:templates>
-    <template id="CollapsibleDiv">
-        <style>
-            .title {
-                border: 1px solid #999;
-                border-radius: 5px;
-                font-weight: 600;
-                background: rgb(228, 255, 197);
-                padding: 0.5rem;
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin: 0.5rem 0
-            }
-        </style>
-        <div class="title">
-            <slot name='title'></slot>
-            <button ika:bf="openClose">Open Section</button>
-        </div>
-        <slot name="div" style="display: none"></slot>
-    </template>
-</ika:templates>
-
 <header>
-    <div style="padding: 1rem; background: #eee">
-        <span style="font-size: 1.25rem; margin: 1rem">以下 • Ika</span>
-        <span style="color: #888">create simply with web standards</span>
-    </div>
+    <a href="/" data-ika-target="main" class="homeLink">以下 • Ika</a>
+    <span style="color: #888">create simply with web standards</span>
 </header>
 
 <body>
-    <div class="main">
-        <nav>
-            <ika-me ika:is='nav' cn="ika-a" mf="sections" bd="nav"></ika-me>
-        </nav>
-        <div class="separator" style="width:1px"></div>
-        <div class="container" id="container">
-            Welcome to Ika. Click on a section to begin.
-        </div>
-    </div>
+    <ika-route key="main" src="/static/home.html">
+    </ika-route>
 
-    <div style="margin: 1rem; position: fixed; right: 0; top: 0;">
-        <input id="scriptIn"></input>
-        <button onclick="eval(document.getElementById('scriptIn').value)">Execute</button>
-        <span style="font-size: 0.75rem">UPS: <span id="ups"></span></span>
-    </div>
 </body>
-
-<script type="module">
-    // import * as T from './ika.js'
-    // console.log(T)
-    import { ika } from 'https://unpkg.com/ikajs'
-
-    ika.reg.setBindValue('ika-me:nav', {
-        bd: {
-            "#attr": (d) => {
-                const words = d.name.replace('-', '').split(' ');
-                const fileName = words.map(w => w.charAt(0).toUpperCase() + w.substring(1, w.length).toLowerCase()).join('');
-                return {
-                    href: `./sections/${fileName}.html`,
-                    target: 'container',
-                    class: 'navLink'
-                };
-            },
-            "#prop": (d) => {
-                return {
-                    textContent: d.name
-                };
-            },
-        },
-        sections: [
-            { name: 'Introduction' },
-            { name: 'Binding Basics' },
-            { name: 'Advanced Binding' },
-            { name: 'States and the Bundle' },
-            { name: 'Global States' },
-            { name: 'Advanced Components' },
-            { name: 'Code Splitting' },
-            { name: 'The Registry' },
-            { name: 'Mapping Data' },
-            { name: 'Example - Will Water Boil' },
-            { name: 'Test' }
-        ],
-    })
-</script>
-
 
 </html>

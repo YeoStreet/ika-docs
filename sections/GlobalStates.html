@@ -99,7 +99,7 @@ see how the example below changes when you press the "Pay Now" button above.
 
 
 <script>
-    import { createIkaComponent, ika } from 'https://unpkg.com/ikajs'
+    import { createIkaComponent, ika } from './ika.js'
 
     ika.reg.setBindValue('ika-me:cartDemo', {
         bd: {
@@ -110,17 +110,21 @@ see how the example below changes when you press the "Pay Now" button above.
                 }
             }
         },
-        cart: [
-            { name: 'Product #1', price: 100, size: 'S', quantity: 10 },
-            { name: 'Product #2', price: 200, size: 'M', quantity: 5 },
-            { name: 'Product #3', price: 300, size: 'L', quantity: 1 }
-        ]
+        mf: {
+            cart: [
+                { name: 'Product #1', price: 100, size: 'S', quantity: 10 },
+                { name: 'Product #2', price: 200, size: 'M', quantity: 5 },
+                { name: 'Product #3', price: 300, size: 'L', quantity: 1 }
+            ]
+        }
     })
 
     createIkaComponent('cart-item')
     createIkaComponent('items-container', {
         construct: (c) => {
             ika.reg.registerNode(c, c, subscribeToBind)
+
+            console.log(c.shadowRoot.innerHTML)
 
             function subscribeToBind(id, n, r) {
                 ika.reg.subscribeToBind(

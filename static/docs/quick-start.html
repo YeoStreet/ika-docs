@@ -1,0 +1,71 @@
+<h1>
+    Quick Start
+</h1>
+<p>
+    👋 To dive right in, see this example's complete code via this <a
+        href="https://codepen.io/imdavidmin-the-flexboxer/pen/zYJKaoO" target="_blank">CodePen</a> link.
+</p>
+</p>
+<h2>
+    Add Ika to your project
+</h2>
+<p>
+    You can add Ika to your page by using the CDN link hosted on UNPKG. Since Ika is published as a module and does
+    not define a <code inline>window</code> level variable, you can use an import statement in your own module
+    like so:
+</p>
+<code>
+    <pre><span class="ht">&lt;script</span> <span class="attr">type</span>=<span class="val">"module"</span><span class="ht">&gt;</span></pre>
+    <pre>   <span class="fn">import</span> { <span class="var">defineIkaComponent</span> } <span class="fn">from</span> <span class="val">'https://unpkg.com/ikajs'</span>;</pre>
+    <pre class="comment">   // Your code here...</pre>
+    <pre><span class="ht">&lt;/script&gt;</span></pre>
+</code>
+<p>
+    Alternatively, you can install the package via NPM in your project, with <code inline>yarn add ikajs</code>
+    or <code inline>npm install ikajs</code>.
+</p>
+
+<h2>Creating a component</h2>
+<p>
+    To create a <code inline>&lt;hello-world&gt;</code> component, define the component's template first, and then
+    register the component to make it available.
+</p>
+<p>
+    Ika puts all component templates into an element called <code inline>ika:templates</code>. To help Ika find
+    and define the component, add the following to the page's HTML.
+</p>
+<code>
+    <pre><span class="ht">&lt;ika:templates&gt;</span></pre>
+    <pre>   <span class="ht">&lt;template</span> <span class="attr">id</span>=<span class="val">"hello-world"</span><span class="ht">&gt;</span></pre>
+    <pre>       Hello, world!</pre>
+    <div class="ht">
+        <pre>   &lt;/template&gt;</pre>
+        <pre>&lt;/ika:templates&gt;</pre>
+    </div>
+    
+</code>
+<p>Note the <code inline>id</code> attribute - this marks the element as the template for the component we're about to
+    define.</p>
+<p>Using a script tag, import Ika from UNPKG's CDN link and define the component, like so:</p>
+<code>
+    <pre><span class="ht">&lt;script</span> <span class="attr">type</span>=<span class="val">"module"</span><span class="ht">&gt;</span></pre>
+    <pre>   <span class="fn">import</span> { <span class="var">defineIkaComponent</span> } <span class="fn">from</span> <span class="val">'https://unpkg.com/ikajs'</span>;</pre>
+    <pre>   <span class="fn">defineIkaComponent</span>(<span class="val">'hello-world'</span>)</pre>
+    <pre><span class="ht">&lt;/script&gt;</span></pre>
+</code>
+<p>Done! The component is now available to use as the <code inline>&lt;hello-world&gt;</code> element.
+
+<h2>How this works, briefly</h2>
+
+<p>Ika makes use a set of standard Web APIs to create encapsulated, custom HTML elements. As with all <a
+        href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements">custom elements</a>,
+    components created through Ika also follow <a href="https://html.spec.whatwg.org/#valid-custom-element-name">naming
+        rules</a>, requiring at least one dash. The <code inline>defineIkaComponent()</code> function is at its root a
+    wrapper over the <code inline>customeElements.define()</code> standard Web API.
+</p>
+<div class="onwardLinks">
+    <a style="opacity: 0"></a>
+    <a href='./introduction.html' data-ika-target="docContent">
+        Next: Introduction
+    </a>
+</div>

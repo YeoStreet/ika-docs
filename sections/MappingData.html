@@ -106,20 +106,23 @@
 
 
 <script type="module">
-    import { ika } from 'https://unpkg.com/ikajs'
+    import { ika } from './ika.js'
 
     ika.reg.setBindValue('ika-me:productCards', {
-        productData: [
-            { name: 'Product #1', price: 100, size: 'S' },
-            { name: 'Product #2', price: 200, size: 'M' },
-            { name: 'Product #3', price: 300, size: 'L' }
-        ],
+        bd: {},
+        mf: {
+            productData: [
+                { name: 'Product #1', price: 100, size: 'S' },
+                { name: 'Product #2', price: 200, size: 'M' },
+                { name: 'Product #3', price: 300, size: 'L' }
+            ],
+        }
     })
 
 </script>
 
 <script>
-    import { createIkaComponent } from 'https://unpkg.com/ikajs'
+    import { createIkaComponent } from './ika.js'
 
     createIkaComponent('variant-display')
     createIkaComponent('product-card')

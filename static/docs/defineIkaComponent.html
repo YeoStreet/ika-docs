@@ -1,0 +1,112 @@
+<style>
+    .indent {
+        padding-left: 1rem
+    }
+
+    main h3 {
+        font-size: 1rem;
+    }
+</style>
+
+<h1>defineIkaComponent()</h1>
+<p>The <code inline>defineIkaComponent()</code> method defines a new Ika component.</p>
+
+<h2>Syntax</h2>
+<code style="margin: 1rem">
+    defineIkaComponent(name)<br>
+    defineIkaComponent(name, options)
+</code>
+
+<h2>Parameters</h2>
+<h3> <code inline>name: string</code></h3>
+<p>
+    Name for the new Ika component, same naming conventions as required by the <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry"><code
+            inline>CustomeElementRegistry</code></a> object.
+</p>
+
+<h3><code inline>options: IkaComponentOptions</code></h3>
+<div class="indent">
+    <h4><code inline>construct?: (this: IkaComponent) => void</code></h4>
+    <p class="indent">
+        A function to be run in the constructor, after the component's template has been attached to the shadow root.
+        Note that the function will have <code inline>this</code> bound to the component instance.
+    </p>
+
+    <h4><code inline>eventBinds?: { [eventType: string]: (e: Event | CustomEvent) => void },</code></h4>
+    <p class="indent">
+        A KV object specifying the event types the component watches for. For each event key, for example <code
+            inline>click</code>, pass in an event handler function.
+    </p>
+    <h4><code inline>templateId?: string</code></h4>
+    <p>
+        By default, when defining a template, Ika will search for a template with the same <code inline>id</code> as the
+        component's name. To use another ID, pass in the value here.
+    </p>
+
+    <h4><code inline>noTemplate?: boolean</code></h4>
+    <p>
+        If an Ika component does not use a template to attach elements to its shadow root, pass in <code
+            inline>true</code> for this option in order for the constructor to be run.
+    </p>
+    <p>
+        This is needed because Ika components can be defined before a template is loaded into the DOM. Ika will
+        wait for a template to be added before it proceeds with any construtor logic passed in the <code
+            inline>construct</code> option, so that any element references to a component's shadow DOM is safe.
+    </p>
+
+    <p> <i>Lifecycle callbacks</i> </p>
+    <h4><code inline>attributesWatched?: { [attribute: string]: AttributeChangedHandler }</code></h4>
+    <div class="indent">
+        <p>
+            A KV object specifying the element's attributes to watch changes for.</p>
+        <p>
+            The <code inline>AttributeChangedHandler</code> type mirrors the <code
+                inline>attributeChangedCallback</code>
+            <a
+                href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks">
+                lifecycle callback </a> for custom elements. It is a callback function that receives 3 parameters when
+            the attribute changes: the name of the attribute, the old value, and the new value. <code inline>this</code>
+            is bound to the component instance.
+        </p>
+        A quick note - unlike <code inline>attributeChangedCallback</code>, Ika components use the <code
+            inline>MutationObserver</code> API.
+        </p>
+    </div>
+
+    <h4><code inline>adoptedCallback?: (this: IkaComponent) => void</code> </h4>
+    <p>
+        A passthrough for the standard custom element <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks">
+            lifecycle callback </a>. Invoked each time the custom element is moved to a new document.
+    </p>
+
+    <h4><code inline>connectedCallback?: (this: IkaComponent) => void</code> </h4>
+    <p>
+        A passthrough for the standard custom element <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks">
+            lifecycle callback </a>. Invoked each time the custom element is appended into a document-connected element.
+        This will happen each time the node is moved, and may happen before the element's contents have been fully
+        parsed.
+    </p>
+
+    <h4><code inline>disconnectedCallback?: (this: IkaComponent) => void</code> </h4>
+    <p>
+        A passthrough for the standard custom element <a
+            href="https://developer.mozilla.org/en-US/docs/Web/Web_Components/Using_custom_elements#using_the_lifecycle_callbacks">
+            lifecycle callback </a>.Invoked each time the custom element is disconnected from the document's DOM.
+    </p>
+</div>
+<h2>Important Note</h2>
+<p>
+    Arrow functions like <code inline>()=>{}</code> cannot have its <code inline>this</code> bound, so when you pass in
+    functions in the construct options for an Ika component, you must either pass in a variable that is a function, or
+    use notation like below:
+</p>
+<code>
+    <pre><span class="fn">defineIkaComponent</span>(<span class="val">'hello-world'</span>, {</pre>
+    <pre>  <span class="fn">construct</span>() {} </pre>
+    <pre>})</pre>
+</code>
+<p>Otherwise, references to <code inline>this</code> in your code that's meant to be the component instance will point
+    to something unexpected.</p>

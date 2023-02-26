@@ -1,0 +1,56 @@
+<h1>Introduction</h1>
+<p style="border: 1px solid;padding: 1rem;">
+    <b>WARNING</b>: Ika is still in development and can abandon certain APIs with no notice. It is not recommended for
+    use in production code, and should be used in an exploratory, experimental manner only.
+</p>
+<h2>Motivation</h2>
+<p>Ika is named from 以下 in Japanese, which means "less".</p>
+<p>Ika was born out of the desire to reduce framework specific knowledge and workflows needed in front-end web
+    development. It's a project started when a developer building his eCommerce website in React was eventually fed up.
+    As the project grew in scale, he thought the very specific patterns a framework required him to follow was
+    counterproductive. He hated wasting time on problems caused by package inter-dependencies. He found it tedeous to
+    debugging code that's been compiled and processed in multiple passes.</p>
+<p>The web was invented to work with three very basic elements: HTML, for content; CSS, for presentation markup, and JS,
+    for interactivity. The front-end frameworks came at a time when the needs of web development outpaced the evolution
+    of web standards.</p>
+<p>Take React for example. Disregarding its many other useful features for frequently updating, complex UIs, being able
+    to write a component once and reuse it without copying and pasting was a transformative experience for devs.</p>
+<p>But the web has grown now. It is incorporating many of the popular features of JS frameworks into standard web APIs.
+    Web Components is one such effort. Granted, it is nowhere as full featured as the vibrant ecosystems around the most
+    popular front-end frameworks, it is often enough.</p>
+<p>When standards have improved, the tradeoffs from using a front-end framework should be re-evaluated. Is it still
+    worth the investment to make framework specific code? Is the network payload for the framework worth it for the
+    features it brings?</p>
+
+<h2>Standards driven</h2>
+<p>If you followed the Quick Start guide, sorry. It was a trick. The best way to display "Hello, world" on a page is
+    simply write it in HTML. As follows from the motivations for Ika, we champion using as little JS as possible to
+    achieve your front-end result.
+</p>
+<p>If Ika doesn't reduce the time you spend to achieve your result, don't use it at all! This is possible because Ika
+    works with the DOM API and other standard Web APIs. It does not have a virtual DOM, or use synthetic events, or need
+    a diffing algorithm.</p>
+
+<h2>Ergonomics first</h2>
+<p>Ika is useful over standard Web APIs because it saves you time writing boiler plate code, and abstracts away some
+    code execution order concerns. At the same time, it strives to be unopinionated so that you can use it in a way
+    that's most productive and natural for you.</p>
+<p>For example, if you prefer to update elements directly through JS in your component's logic, you can do so. But if
+    you want to use data bindings in HTML code without writing in logic, you can do so as well.</p>
+
+<h2>Zero dependencies</h2>
+<p>
+    Ika keeps things as simple as possible, using standard Web APIs to achieve what it needs wherever possible. As a
+    result, the code base is able to have no external dependencies, and we want to keep it this way to avoid "dependency
+    hell".
+</p>
+<p>As a result, the production package of Ika stays at a slim ~15kb gzipped, compared to ~46kb gzipped for React and
+    React DOM.</p>
+<div class="onwardLinks">
+    <a href='./quick-start.html' data-ika-target="docContent">
+        Back: Quick Start
+    </a>
+    <a href='./state-and-data-binding.html' data-ika-target="docContent">
+        Next: State and data binding
+    </a>
+</div>

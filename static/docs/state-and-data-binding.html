@@ -1,0 +1,99 @@
+<h1>States and Data Binding</h1>
+<h2>Setting and reading states</h2>
+<p>
+    Remember that Ika work with the DOM API, and that each component is defined as a JavaScript class that extends the
+    base <code inline>HTMLElement</code> class. A component's state is stored inside its class instance, and the
+    component is referenced from the DOM as an Element.
+</p>
+<p>
+    This means that in addition to the properties and methods of the <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">HTMLElement</a> interface, you have
+    additional options for an Ika component. For example, we can assign and read the state <code inline>name</code>
+    stored inside our <code inline>&lt;hello-world&gt;</code> component by using the <code inline>getState()</code> and
+    <code inline>setState()</code> methods.
+</p>
+<code>
+    <pre><span class="rk">const</span> <span class="var">el</span> = <span class="var">document</span>.<span class="fn">querySelector</span>(<span class="val">'hello-world'</span>)</pre>
+    <pre><span class="var">console</span>.<span class="fn">log</span>(<span class="var">el</span>.<span class="fn">getState</span>(<span class="val">'name'</span>))</pre>
+</code>
+
+<p>
+    Note that unlike React, a state change is immediate and local. In React, if you use a <code inline>useState</code>
+    hook, and you use the setter function to change the state, you'll see that in code immediately following that setter
+    call, referencing the state variable will return the older value. Because Ika does not manage an entire DOM tree,
+    and states are written directly to class instances, and state change takes immediate effect, inside the class
+    instance behind the custom element in the DOM.
+</p>
+<p>
+    An Ika component's state is managed by its <code inline>StateBindRegister</code> object, which stores callbacks for
+    each state key. You won't manage the callbacks directly - read on to see how to react to state changes.
+</p>
+<h2>Updating UI when state changes</h2>
+<p>
+    We can implement a UI change due to a state change in two ways: the component defines what child element to change
+    and modifies its properties, or, that child element registers itself to the component to be changed when a state
+    changes.
+</p>
+<p>Ika allows you to do both. For the data binding route, Ika provides the <code inline>&lt;ika-b&gt;</code> and <code
+        inline>&lt;ika-ab&gt;</code> custom elements for simple binding. From the component logic side in JavaScript,
+    <code inline>IkaComponent</code> provides a <code inline>linkState()</code> function that allows you to pass in a
+    callback function when the state value is updated.
+</p>
+
+<h3>Data binding</h3>
+</p>
+<p>
+    For the data binding route, IkaComponent uses a <code inline>StateBindRegister</code> object. It implements a
+    pub/sub model where a child node registers its binding to some state by firing an <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/Event">Event</a>, which travels upwards in
+    the DOM tree and is caught by the parent component. When a state changes, the bind register executes the callbacks.
+</p>
+<p>
+    For example, in our <code inline>&lt;hello-world&gt;</code> example, we can modify the component template to include
+    an <code inline>&lt;ika-b&gt;</code> element to bind to the state <code inline>name</code>, and an <code
+        inline>&lt;ika-ab&gt;</code> element to bind the text's style to the state <code inline>textStyle</code>.
+</p>
+<code>
+    <pre><span class="ht">&lt;templates&gt;</span></pre>
+    <pre>   <span class="ht">&lt;ika-ab</span> <span class="attr">data-style</span>=<span class="val">"textStyle"</span><span class="ht">&gt;</span></pre>
+    <pre>       <span class="ht">&lt;span&gt;</span>Hello, <span class="ht">&lt;ika-b</span> <span class="attr">b</span>=<span class="val">"name"</span><span class="ht">&gt;&lt;/ika-b&gt;</span><span class="ht">&lt;/span&gt;</span></pre>
+    <pre>   <span class="ht">&lt;/ika-ab&gt;</span></pre>
+    <pre><span class="ht">&lt;/templates&gt;</span></pre>
+</code>
+<p>
+    <code inline>&lt;ika-b&gt;</code> simply changes its text content to the state's value. We use the <code
+        inline>b</code> attribute to specify what state key the element binds to. Optionally, we can add the <code
+        inline>allow-html</code> boolean attributeto tell <code inline>&lt;ika-b&gt;</code> to change its <code
+        inline>innerHTML</code>to the state's value instead.
+</p>
+<p>
+    <code inline>&lt;ika-ab&gt;</code> performs an attribute bind – its child elements' attribute is bound
+    to a state. We use custom data attributes to denote what attribute to should be bound to what state – in this case,
+    the style attribute for the<code inline>&lt;span&gt;</code> element is bound to the state key <code
+        inline>"textStyle"</code>.
+</p>
+<p>
+    This way of making UI updates would be more suited to frequently updating interfaces, because it taps into Ika's
+    Buffer system. It may also feel more intuitive to see in your HTML code where a value would fit.
+</p>
+<h3>Component logic</h3>
+<p>
+    The alternative way is to specify this logic in the component's definition, without using any binding components.
+</p>
+<code>
+    <pre><span class="fn">defineIkaComponent</span>(<span class="val">'hello-world'</span>, {</pre>
+    <pre>    <span class="fn">construct</span>() {</pre>        
+    <pre>        <span class="rk">this</span>.<span class="fn">linkState</span>(<span class="val">'name'</span>, (<span class="var">v</span>) => {</pre>
+    <pre>           <span class="rk">this</span>.<span class="var">shadowRoot</span>.<span class="fn">querySelector</span>(<span class="val">'span'</span>).<span class="var">textContent</span> = <span class="val">`Hello, <span class="rk">${<span class="var">v</span>}</span>!`</span></pre> 
+    <pre>        })</pre>
+    <pre>        <span class="rk">this</span>.<span class="fn">linkState</span>(<span class="val">'textStyle'</span>, (<span class="var">v</span>) => {</pre>
+    <pre>           <span class="rk">this</span>.<span class="var">shadowRoot</span>.<span class="fn">querySelector</span>(<span class="val">'span'</span>).<span class="var">style</span> = <span class="var">v</span> })</pre>
+    <pre>        }</pre>
+    <pre>})</pre>
+</code>
+<p>
+    This achieves the same result as our example in the previous section using data binding elements. You might find
+    this way more intuitive if you are more used to working exclusively in JavaScript for your web pages, or may need to
+    transform data before they can be rendered in UI (in which case, check out details on <code
+        inline>linkState()</code> <a>here</a>.)
+</p>

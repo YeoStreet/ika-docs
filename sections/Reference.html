@@ -1,0 +1,22 @@
+
+<ika:templates>
+    <template id="ika-component-documentation">
+        <h3>
+            &lt;<ika-b b="componentName"></ika-b>&gt;
+        </h3>
+    </template>
+</ika:templates>
+
+<ika-me ika:is="ika-component-documentation" mf="components" cn="ika-component-documentation"></ika-me>
+
+<script type="module">
+    import { ika } from './ika.js'
+    ika.reg.setBindValue('ika-me:ika-component-documentation', {
+        bd: {},
+        mf: {
+            components: [
+                {name: 'ika-me'}
+            ]
+        }
+    })
+</script>

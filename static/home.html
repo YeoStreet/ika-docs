@@ -1,0 +1,168 @@
+<style>
+    .bannerText {
+        width: 100%;
+        font-size: 3rem;
+        margin: 3rem 0;
+    }
+
+    .spotlight {
+        text-align: center;
+        padding: 3rem;
+        background: var(--theme-primary);
+        color: #fff
+    }
+
+    .spotlight p {
+        text-align: left;
+        margin: auto
+    }
+
+    .getStarted {
+        text-align: center;
+    }
+
+    code {
+        text-align: left;
+        display: inline-block;
+        padding: 1rem;
+        background: var(--theme-secondary);
+        color: var(--theme-secondary-text)
+    }
+
+    code.inline {
+        padding: 3px 5px;
+    }
+
+    code pre {
+        margin: 3px
+    }
+
+    .section {
+        padding: 3rem
+    }
+
+    .card h2 {
+        margin: 0 auto 1rem;
+        padding: 0.5rem;
+        border-bottom: 2px solid #ffffff80;
+        text-transform: uppercase;
+        font-size: 1.125rem;
+        width: fit-content
+    }
+
+    .card {
+        padding: 2rem;
+        background: #ffffff20;
+        border-radius: 1rem;
+        max-width: 300px;
+    }
+
+    .cardContainer {
+        display: grid;
+        gap: 2rem;
+        justify-items: center;
+        margin: 2rem auto;
+        width: fit-content
+    }
+
+    .ctaContainer {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin: 4rem auto
+    }
+
+    .ctaContainer>* {
+        color: #eee;
+        padding: 1rem;
+        border: 0;
+        border-radius: 5px;
+        text-transform: capitalize;
+        box-shadow: 0 2px 7px 0 #00000060;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+
+    .ctaContainer>a {
+        background: #00000060;
+        text-decoration: none;
+    }
+
+    .ctaContainer>*:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 7px 0 #00000060;
+    }
+
+    .ctaContainer button.primaryCTA {
+        background: #f8f8f8;
+        color: #000
+    }
+
+    @media (min-width: 600px) {
+        .cardContainer {
+            grid-template-columns: 1fr 1fr 1fr;
+
+        }
+    }
+</style>
+<ika:templates>
+    <template id="hello-world">
+        Hello, world!
+    </template>
+</ika:templates>
+<div class="container">
+    <div class="spotlight">
+        <h1 class="bannerText">
+            以下 • Ika
+        </h1>
+        <h1>A web components framework</h1>
+        <div class="ctaContainer">
+            <button class="primaryCTA"
+                onclick="document.querySelector('.getStarted').scrollIntoView({behavior:'smooth'})">
+                Get started
+            </button>
+            <a href="/docs/" data-ika-target="main">
+                Read docs
+            </a>
+        </div>
+        <div class="cardContainer">
+            <div class="card">
+                <h2>Standards driven</h2>
+                <p>Ika aims to reduce the JS written for web front-ends, using native Web APIs wherever possible.</p>
+            </div>
+            <div class="card">
+                <h2>Ergonomics first</h2>
+                <p>Ika prioritises developer ergonomics, and aims to be as unopinionated and useful as possible to get
+                    your project up and running.</p>
+            </div>
+            <div class="card">
+                <h2>Zero dependency</h2>
+                <p>Reducing complexity and improving compatibility, Ika has no package dependencies and comes at roughly ~15kb gzipped.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="getStarted section">
+        <h2 style="text-align: center;">Get started</h2>
+        <p>Add the component template to your HTML:</p>
+        <code>
+            <pre>&lt;ika:templates&gt;</pre>
+            <pre>   &lt;template id="hello-world"&gt;</pre>
+            <pre>       Hello, world!</pre>
+            <pre>   &lt;/template&gt;</pre>
+            <pre>&lt;/ika:templates&gt;</pre>
+        </code>
+
+        <p>Then, declare the component through JS:</p>
+        <code>
+            <pre>&lt;script type="module"&gt;</pre>
+            <pre>   import { defineIkaComponent } from 'https://unpkg.com/ikajs';</pre>
+            <pre>   defineIkaComponent('hello-world')</pre>
+            <pre>&lt;/script&gt;</pre>
+        </code>
+        <p>Done! Use your component as <code class="inline">&lt;hello-world&gt;</code> anywhere on your page.</p>
+    </div>
+
+
+</div>

@@ -1,22 +1,16 @@
-* {
-    font-family: "IBM Plex Sans", sans-serif;
-    --theme-primary: #ffab03;
-    --theme-primary-lighter: #fff8eb;
-    --theme-code: #eee
+:root {
+    font-family: var(--default-font);
+    font-size: 14px;
+    color: #333;
+    background: #ddd;
+    --default-font: "IBM Plex Sans", sans-serif;
+    --theme-primary: #f34213;
+    --theme-primary-text: #fff;
+    --theme-secondary: #2e2e3a;
+    --theme-secondary-text: #fff;
 }
-
-body {
-    margin: 0;
-}
-
-p {
-    font-size: 0.875rem;
-    line-height: 1.75;
-}
-
-.separator {
-    background: var(--theme-primary);
-    margin: 1rem
+body{
+    margin: 0
 }
 
 code,
@@ -36,20 +30,6 @@ div.code {
     font-size: 0.875rem;
 }
 
-.container {
-    background: #fafafa;
-    padding: 1rem 1rem 2rem
-}
-
-.section {
-    margin: 1rem 0;
-    padding: 1rem;
-    border: 1px solid #aaa;
-    background: white;
-    box-shadow: 0 0 10px 0px rgba(0, 0, 0, 0.05);
-    border-radius: 5px;
-}
-
 .aside {
     background: rgb(239, 241, 229);
     padding: 0.5rem;
@@ -57,18 +37,6 @@ div.code {
     font-size: 0.875rem;
     border: 1px solid rgb(179, 180, 136);
     border-radius: 5px;
-}
-
-.main {
-    display: grid;
-    grid-auto-flow: column;
-    grid-template-columns: max-content max-content auto;
-}
-
-nav {
-    display: grid;
-    grid-auto-flow: row;
-    margin: 1rem 0;
 }
 
 .navLink {
