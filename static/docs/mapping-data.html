@@ -1,0 +1,134 @@
+<style>
+    .indent {
+        padding-left: 1rem;
+    }
+</style>
+<h1>Mapping Data</h1>
+<p>
+    A common front-end task is to take a data array and to generate a variation of some presentation element for each
+    entry. While Web Components enables encapuslated components, one usually relies on custom JavaScript to generate
+    those elements.
+</p>
+<p>
+    Ika provides a custom element called <code inline>&lt;ika-me&gt;</code> to aid in this workflow. It stands for
+    <i>mapped elements</i>, and binds to a state value of its parent component to update its child elements.
+</p>
+<h2>Example - Mapping phone book entries</h2>
+<p>
+    Suppose a parent component <code inline>&lt;phone-book&gt;</code> has some logic where it fetches data and
+    transforms it into an array of contact list objects, as a KV with keys <code inline>number</code> and <code
+        inline>country</code>, like so:</p>
+<code>
+    [<br>
+    <pre>   { number: <span class="val">38103403</span>, country: <span class="val">"Bulgaria"</span> },</pre>
+    <pre>   { number: <span class="val">23920504</span>, country: <span class="val">"Burkina Faso"</span> },</pre>
+    <pre>   { number: <span class="val">23705920</span>, country: <span class="val">"Atlantis"</span> },</pre>
+    ]
+</code>
+<p>
+    Suppose there is another component <code inline>&lt;phone-book-entry&gt;</code> that presents the data in a neatly
+    formmated way. The task is to map all the phone book entries, with each <code inline>&lt;phone-book-entry&gt;</code>
+    element having the number as its child node.
+</p>
+<p>
+    In addition, we also highlight all entries with the <code inline>country</code> value matching <code
+        inline>Atlantis</code>, by giving it a <code inline>isAtlantis</code> CSS class. We also want to assign the
+    country value to the state of the <code inline>&lt;phone-book-entry&gt;</code> instance.
+</p>
+
+<p>
+    In the template of the parent component <code inline>&lt;phone-book&gt;</code>, we have the following:
+</p>
+<code>
+    <pre><span class="ht">&lt;template</span> <span class="attr">id</span>=<span class="val">"phone-book"</span><span class="ht">&gt;</span></pre>
+    <pre>   <span class="ht">&lt;p&gt;</span>A list of phone book records<span class="ht">&lt;/p&gt;</span></pre>
+    <pre>   <span class="ht">&lt;ika-me</span> <span class="attr">mf</span>=<span class="val">"_default"</span> <span class="attr">ika:is</span>=<span class="val">"contacts"</span> <span class="attr">cn</span>=<span class="val">"phone-book-entry"</span><span class="ht">&gt;&lt;/ika-me&gt;</span></pre>
+    <pre><span class="ht">&lt;/template&gt;</span></pre>
+</code>
+<p>
+    After the parent component fetches the data, it sets its state <code inline>ika-me:contacts</code> to the following
+    KV object. Note value for the <code inline>_default</code> key under <code inline>mf</code> is exactly the data
+    array shown above.
+</p>
+<code>
+    {<br>
+    <pre>   mf: {</pre>
+    <pre>       "_default": [</pre>
+    <pre>           { number: <span class="val">38103403</span>, country: <span class="val">"Bulgaria"</span> },</pre>
+    <pre>       ...]</pre>
+    <pre>   },</pre>
+    <pre>   bd: {</pre>
+    <pre>       "_default": {</pre>
+    <pre>           attr: (v) => { <span class="rk">return</span> { </pre>
+    <pre>               class: v.country == <span class="val">"Atlantis"</span> ? <span class="val">"isAtlantis"</span> : <span class="val">""</span></pre>
+    <pre>           }},</pre>
+    <pre>           prop: (v) => { <span class="rk">return</span> {</pre>
+    <pre>               textContent: <span class="var">v.number</span>.<span class="fn">toString()</span></pre>
+    <pre>           }},</pre>
+    <pre>           state: {</pre>
+    <pre>               country: (v) => <span class="var">v.country</span></pre>
+    <pre>           },</pre>
+    <pre>       }</pre>
+    <pre>   }</pre>
+    }
+</code>
+<p>
+    This is enough for the <code inline>&lt;ika-me&gt;</code> element to map each phone book record onto the <code
+        inline>&lt;phone-book-entry&gt;</code> element, and place those elements as its child elements in the DOM tree.
+    The binding dictionary gives the logic on how to map the data onto an HTML element, and the map from array gives
+    <code inline>&lt;ika-me&gt;</code> the data it needs to map from.
+</p>
+
+<h2>The <code inline>&lt;ika-me&gt;</code> element</h2>
+<p>You can find the reference for this element <a href="./components.html" data-ika-target="docContent">here</a>, with
+    all attribute specifications.</p>
+
+<h2>Specifictaion</h2>
+<p>
+    The state value to be bound to, as shown in the example above, needs to conform to the <code
+        inline>IkaMeBindingValue</code> type, which is a KV object with two keys:
+</p>
+<div class="indent">
+    <code inline>mf</code>
+    <p>The value of this key is a KV object that has named key and mapping value array entries. The mapping array could
+        be either an <code inline>Array</code> or a <code inline>Set</code>.</p>
+    <code inline>bd?</code>
+    <p>The value of this key is a KV object that has binding dictionaries for named keys. The named keys allows the same
+        data to be mapped differently onto different elements, with the <code inline>&lt;ika-me&gt;</code> element
+        indicating which binding dictionary key it wants to reference. </p>
+    <p>The binding dictionary allows the specification of attributes and properties to be applied to the mapped element
+        based on the input data. If the mapped element is a Ika component, the dictionary can also specify the states to
+        be applied.</p>
+    <p>The binding dictionary itself is a KV object with the following keys:</p>
+    <div class="indent">
+        <code inline>attr?</code>
+        <p>A transformation function that takes in the data array item, and returns a KV object with keys being the
+            element attribute name, and the values being the attribute values.</p>
+        <code inline>prop?</code>
+        <p>A transformation function that takes in the data array item, and returns a KV object with keys being the
+            element property name, and the values being the properties' values.</p>
+        <code inline>state?</code>
+        <p>A KV object where the keys indicate the state key for the Ika component to assign a value, and the values are
+            functions that return the value to be assigned to that state key. </p>
+        <p>The functions take in two arguments: the first being the data array item, the second being the index of the
+            data array item. </p>
+    </div>
+</div>
+
+<p>In short, the <code inline>IkaMeBindingValue</code> type is defined like so:</p>
+<code>
+<pre><span class="rk">type</span> <span class="var">IkaMeBindingValue</span> = {</pre>
+<pre>    mf: { [mf: string]: Array&lt;any&gt; | Set&lt;any&gt; },</pre>
+<pre>    bd?: <span class="var">BindingDictionaries</span></pre>
+<pre>}</pre>
+<br>
+<pre><span class="rk">type</span> <span class="var">BindingDictionary</span>&lt;T = any&gt; = {</pre>
+<pre>   attr?: <span class="var">TransformationFunction</span>&lt;T&gt;,</pre>
+<pre>   prop?: <span class="var">TransformationFunction</span>&lt;T&gt;,</pre>
+<pre>   states?: { [k: string]: (<span class="var">data</span>: T, <span class="var">i?</span>: number) =&gt; any }</pre>
+<pre>}</pre>
+<br>
+<span class="rk">type</span> <span class="var">TransformationFunction</span>&lt;T = any&gt; = (d: T, i?: number) =&gt; { [k: string]: string | number }
+<br>
+<span class="rk">type</span> <span class="var">BindingDictionaries</span>&lt;T = any&gt; = { [bdKey: string]: <span type="var">BindingDictionary</span>&lt;T&gt; }
+</code>

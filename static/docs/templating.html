@@ -1,0 +1,91 @@
+<h1>Templating</h1>
+<p>
+    Ika components are Web Components, and uses the shadow DOM to encapsulate the component's presentation and styling.
+    When you define a component, Ika will search for a <code inline>&lt;template&gt;</code> element to clone to that
+    component's shadow root.
+</p>
+<h2>The <code inline>&lt;template&gt;</code> element</h2>
+<p>
+    Templates for Ika should be put inside a <code inline>&lt;ika:templates&gt;</code> element, in the light / main DOM.
+    Notice this is not a valid name for an HTMLElement, but can still be accessed as a DOM node. Ika places a <code
+        inline>MutationObserver</code> on this element, so you don't have to worry if your JavaScript code defining a
+    component is executed before the template is loaded in.
+</p>
+<p>
+    For simple customisation of components, we recommend using <code inline>slot</code>. This is another part of the Web
+    Component standard. Add a child element to the component, and add the <code inline>slot</code> attribute, with its
+    value being the name of the <code inline>&lt;slot&gt;</code> element, and that element will be slotted in place.
+</p>
+<p>
+    For example, define the template like so:
+</p>
+<code>
+    <pre><span class="ht">&lt;ika:templates&gt;</span></pre>
+    <pre>   <span class="ht">&lt;template <span class="attr">id</span>=<span class="val">"greeting-prompt"</span>&gt;</span></pre>
+    <pre>       Hi, <span class="ht">&lt;slot <span class="attr">name</span>=<span class="val">"userName"</span>&gt;&lt;/span&gt;</span></pre>
+    <pre>   <span class="ht">&lt;/template&gt;</span></pre>
+    <pre><span class="ht">&lt;/ika:templates&gt;</span></pre>
+</code>
+<p>
+    After the component is defined, it can be used like so:
+</p>
+<code>
+    <pre><span class="ht">&lt;greeting-prompt&gt;</span></pre>
+    <pre>   <span class="ht">&lt;span <span class="attr">slot</span>=<span class="val">"userName"</span>&gt;</span></pre>
+    <pre>       David</pre>
+    <pre>   <span class="ht">&lt;/span&gt;</span></pre>
+    <pre><span class="ht">&lt;/greeting-prompt&gt;</span></pre>
+</code>
+<p>
+    This should then display "Hi, David".
+</p>
+
+<h2>Styling components</h2>
+<p>
+    Because Web Components use a shadow DOM that is rendered separately from the main document DOM, component templates
+    can style elements without fear of collision. This does also mean document level CSS styling will not be applied
+    onto elements encapsulated inside the shadow DOM.
+</p>
+<p>
+    Note that while CSS style rules will not pass through the shadow DOM barrier, CSS variables can be accessed. Styling
+    inside the shadow DOM can make use of the <code inline>:host</code> CSS selector, and access variables declared on
+    the main document DOM in <code inline>:root</code>.
+</p>
+<p>For example, define the template like so:</p>
+<code>
+    <pre><span class="ht">&lt;ika:templates&gt;</span></pre>
+    <pre>   <span class="ht">&lt;template <span class="attr">id</span>=<span class="val">"greeting-prompt"</span>&gt;</span></pre>
+    <pre>       <span class="ht">&lt;style&gt;</span></pre>
+    <pre>           <span class="fn">:slotted</span> {</pre>
+    <pre>               <span class="var">color</span>: <span class="fn">var(<span class="val">--theme-primary</span>)</span></pre>
+    <pre>           }</pre>
+    <pre>       <span class="ht">&lt;/style&gt;</span></pre>
+    <pre>       Hi, <span class="ht">&lt;slot <span class="attr">name</span>=<span class="val">"userName"</span>&gt;&lt;/span&gt;</span></pre>
+    <pre>   <span class="ht">&lt;/template&gt;</span></pre>
+    <pre><span class="ht">&lt;/ika:templates&gt;</span></pre>
+</code>
+<p>
+    Then, in the main / light DOM, use the component like so:
+</p>
+<code>
+    <pre><span class="ht">&lt;style&gt;</span></pre>
+    <pre>   <span class="fn">:root</span> {</pre>
+    <pre>       <span class="var">--theme-primary</span>: <span class="val">red</span></pre>
+    <pre>   }</pre>
+    <pre><span class="ht">&lt;/style&gt;</span></pre>
+    <pre><span class="ht">&lt;greeting-prompt&gt;</span></pre>
+    <pre>   <span class="ht">&lt;span <span class="attr">slot</span>=<span class="val">"userName"</span>&gt;</span></pre>
+    <pre>       David</pre>
+    <pre>   <span class="ht">&lt;/span&gt;</span></pre>
+    <pre><span class="ht">&lt;/greeting-prompt&gt;</span></pre>
+</code>
+<p>The component should then display "Hi, David" with "David" in red.</p>
+
+<h2>Things to note</h2>
+<p>
+    There are some cases where the rules for elements in a shadow DOM behave differently to those in the light DOM. For
+    example, in Chrome, autofill for <code inline>&lt;input&gt;</code> elements will not be activated for the light DOM.
+    As long as browsers continue to use these rules, all Web Components will face these limitations. There are
+    workarounds for most cases, for example, to slot elements from the light DOM all the way into where the element is
+    needed.
+</p>

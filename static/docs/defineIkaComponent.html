@@ -32,6 +32,21 @@
         A function to be run in the constructor, after the component's template has been attached to the shadow root.
         Note that the function will have <code inline>this</code> bound to the component instance.
     </p>
+    <h4><code inline>bundle?: { m?: MethodsKV, s?: NamespacedStatesKV }</code></h4>
+    <p><i>Note that this option key is very likely to be depreciated, and split into separate <code
+                inline>methods</code> and <code inline>states</code> option keys.</i></p>
+    <p class="indent">
+        <code inline>MethodsKV</code> takes form of <code
+            inline>{ [methodName: string]: (this: IkaComponent, ...args) => any }</code>. It is a KV object where the
+        values are functions. This attaches methods to an Ika component that can be called.
+    </p>
+    <p class="indent">
+        <code inline>NamespacedStatesKV</code> takes form of <code
+            inline>{ [namespace: string]: { [k: string]: any } }</code>. The namespace <code inline>_default</code> must
+        be included. Each namespace key has a value that is a KV object where the keys are state keys, and values are
+        the state values. This is used to initialise states on a component without using the <code
+            inline>setState()</code> method on the <code inline>IkaComponent</code> class.
+    </p>
 
     <h4><code inline>eventBinds?: { [eventType: string]: (e: Event | CustomEvent) => void },</code></h4>
     <p class="indent">

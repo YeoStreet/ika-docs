@@ -1,0 +1,20 @@
+<h1>Routing</h1>
+<h2></h2>
+<p>
+    Wherever possible, we recommend using the <code inline>&lt;a&gt;</code> element to link to different parts of your
+    site. This is not only helpful by bringing in the default UI behaviour for links, it is also semantically helpful
+    for SEO.
+</p>
+<p>
+    However, if you are making a single page app, the navigation to another address could be unhelpful for state
+    management. Ika helps resolve this issue with built-in routing functionality. At the document level, Ika attaches an
+    event listener for <code inline>click</code> events that originated from <code inline>&lt;a&gt;</code> elements, and
+    will prevent default behaviour if the <code inline>&lt;a&gt;</code> element has the <code
+        inline>data-ika-target</code> custom data attribute.
+</p>
+<p>
+    The data attribute tells Ika which <code inline>&lt;ika-route&gt;</code> container element the navigation event
+    wishes to render new content into. This corresponds to the <code inline>key</code> attribute on the element in
+    question. Read more about the <code inline>&lt;ika-route&gt;</code> element's specifications <a
+        href="./components.html" data-ika-target="docContent">here</a>.
+</p>

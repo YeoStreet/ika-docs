@@ -1,0 +1,165 @@
+<style>
+    .indent {
+        padding-left: 1rem
+    }
+
+    h2 code {
+        text-transform: initial;
+    }
+
+    .leapLink {
+        text-decoration: underline;
+        cursor: pointer;
+    }
+</style>
+
+<h1>Bundled Components</h1>
+<p>
+    Ika provides several custom elements out of the box that plugs into the framework's core features to solve common
+    front-end needs. These are all custom elements that extends the <code inline>HTMLElement</code> interface.
+</p>
+<h2><code inline>&lt;ika-ab&gt;</code></h2>
+</h2>
+<div class="indent">
+    Binds child elements' attributes to states of the parent component. The binding can <a class="leapLink"
+        onclick="document.querySelector('#leap').scrollIntoView()">leap</a>.
+    <h3>Attributes</h3>
+    <div class="indent">
+        <code inline>data-*</code>
+        <p>
+            The custom data attribute's name denotes the attribute of child elements to be bound. The custom data
+            attribute's value denotes the state key of the parent component to bind to.</p>
+        <p>Note that dashes in the data attribute name is preserved, instead of the camel case querying the element's
+            <code inline>dataset</code> property returns. Therefore, if you use an uppercase letter, it will be
+            interpreted as
+            having a dash before it - i.e. <code inline>data-myAttr</code> will bind the <code inline>my-attr</code>
+            property of child elements.
+        </p>
+        </p>
+    </div>
+    <h3>Example</h3>
+    <code>
+        <pre><span class="ht">&lt;ika-ab</span> <span class="attr">data-style</span>=<span class="val">"childStyleString"</span><span class="ht">&gt;</span></pre> 
+        <pre>   <span class="ht">&lt;span&gt;</span>Some text<span class="ht">&lt;/span&gt;</span></pre>
+        <pre><span class="ht">&lt;/ika-ab&gt;</span></pre>
+    </code>
+</div>
+
+<h2><code inline>&lt;ika-b&gt;</code></h2>
+<div class="indent">
+    Binds the text content or inner HTML of this element to a state of the parent component. The binding can <a
+        class="leapLink" onclick="document.querySelector('#leap').scrollIntoView()">leap</a>.
+    <h3>Attributes</h3>
+    <div class="indent">
+        <code inline>b</code>
+        <p>The state key to bind to in the parent component's state.</p>
+        <code inline>allow-html?</code>
+        <p>
+            A boolean attribute that binds this element's <code inline>innerHTML</code> property to the state value
+            instead of the default <code inline>textContent</code>.
+        </p>
+    </div>
+    <h3>Example</h3>
+    <code>Hello, my name is <span class="ht">&lt;ika-b</span> <span class="attr">b</span>=<span class="val">"name"</span><span class="ht">&gt;&lt;/ika-b&gt;</span></code>
+</div>
+
+<h2><code inline>&lt;ika-bf&gt;</code></h2>
+<div class="indent">
+    Invokes an attached method of the parent component when a watched event is fired from child nodes. The binding can
+    <a class="leapLink" onclick="document.querySelector('#leap').scrollIntoView()">leap</a>.
+    <h3>Attributes</h3>
+    <div class="indent">
+        <code inline>data-*</code>
+        <p>
+            The custom data attribute's name denotes the event type to watch for when the event bubbles up from a child
+            node. The custom data attribute's value denotes which function to invoke in the parent component.</p>
+    </div>
+    <h3>Example</h3>
+    <code>
+        <pre><span class="ht">&lt;ika-bf</span> <span class="attr">data-click</span>=<span class="val">"clickHandler"</span><span class="ht">&gt;</span></pre> 
+        <pre>   <span class="ht">&lt;button&gt;</span>Submit form<span class="ht">&lt;/span&gt;</span></pre>
+        <pre><span class="ht">&lt;/ika-bf&gt;</span></pre>
+    </code>
+</div>
+
+<h2><code inline>&lt;ika-me&gt;</code></h2>
+<div class="indent">
+    Maps elements based on a state value of the parent component. The state value should conform to the <code
+        inline>IkaMeBindingValue</code> type - learn more in the <a href="./mapping-data.html"
+        data-ika-target="docContent">mapping data</a> guide.
+    <h3>Attributes</h3>
+    <div class="indent">
+
+        <code inline>mf</code>
+        <p>The map from key.</p>
+        <code inline>cn</code>
+        <p>The tag name of the component to map data to.</p>
+        <code inline>ika:is</code>
+        <p>
+            The instance space name. The binding will be made to the parent component's state key <code
+                inline>ika-me:&lt;instance name&gt;</code>
+        </p>
+        <code inline>post?</code>
+        <p>
+            Options are <code inline>aside</code> and <code inline>remove</code>. <code inline>aside</code> moves this
+            element away from where it is initially to a special <code inline>&lt;ika:aside&gt;</code> element, while
+            keeping the mapped child elements in place. <code inline>remove</code> removes this element after mapping
+            child elements and keeping them in place. </p>
+        <p>
+            Note that if <code inline>remove</code> is used, there will be no remapping of elements if the state value
+            is changed, since this element, which binds to the state value, is removed.
+        </p>
+    </div>
+</div>
+
+<h2><code inline>&lt;ika-import&gt;</code></h2>
+<div class="indent">
+    Import an Ika component from a URL. Learn more about the use of this element in the <a href="./code-splitting.html"
+        data-ika-target="docContent">code splitting</a> guide.
+    <h3>Attributes</h3>
+    <div class="indent">
+        <code inline>src</code>
+        <p>
+            The URL of the Ika component to be loaded onto the current page so that an element tag for that component
+            can be rendered.
+        </p>
+    </div>
+    <h3>Example</h3>
+    <code>
+        <pre><span class="ht">&lt;ika-import</span> <span class="attr">src</span>=<span class="val">"./resources/hello-world.html"</span><span class="ht">&gt;&lt;/ika-import&gt;</span></pre> 
+        <pre><span class="ht">&lt;hello-world&gt;</span><span class="ht">&lt;/hello-world&gt;</span></pre>
+    </code>
+</div>
+
+<h2><code inline>&lt;ika-route&gt;</code></h2>
+<div class="indent">
+    A content container for the built-in router to enable navigation in your single page app (SPA). Alternatively, can
+    be used to load in additional HTML content from a resource URL for code splitting practices. Learn more in the <a
+        href="./routing.html" data-ika-target="docContent">routing guide</a>.
+    <h3>Attributes</h3>
+    <div class="indent">
+        <code inline>key</code>
+        <p>
+            A unique name to identify where to render content when routing is triggered.
+        </p>
+        <code inline>src?</code>
+        <p>
+            Resource URL for any initial content to be loaded, before any routing is triggered.
+        </p>
+        <code inline>no-scroll-on-route?</code>
+        <p>
+            By default, when new content is loaded into this element, the page scrolls to bring the top of this element
+            into view. This boolean attribute if present will disable this behaviour.
+        </p>
+
+    </div>
+</div>
+
+<h2 id="leap">Leaps in data bindings</h2>
+<p>In cases where a binding is made from an element nested inside multiple Ika components, you can specify a <code
+        inline>leap</code> attribute on the element so that it will reach the "real" parent component. </p>
+<p>
+    Without the <code inline>leap</code> attribute, the binding will be made to the closest Ika component upwards in the
+    DOM tree. A value of <code inline>1</code> for this attribute will allow the binding to skip one Ika component and
+    be bound to the state of the next closest upwards in the DOM tree.
+</p>

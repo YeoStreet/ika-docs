@@ -1,0 +1,128 @@
+<style>
+    .indent {
+        padding-left: 1rem
+    }
+
+    main h3 {
+        font-size: 1rem;
+    }
+
+    main h4 {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+<h1>class <code inline>IkaComponent</code> </h1>
+<p>The <code inline>IkaComponent</code> class extends <code inline>HTMLElement</code> interface, and therefore has the
+    same properties and methods outlined <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/HTMLElement">here</a>. Additional options are outlined
+    below.
+</p>
+
+<h2>Instance properties</h2>
+<p class="indent">None, except those inherited from <code inline>HTMLElement</code>.</p>
+
+<h2>Instance methods</h2>
+<div class="indent">
+    <h3> <code inline>IkaComponent.getState()</code></h3>
+    <div class="indent">
+        <p>Gets the state of a component instance specified by a state key.</p>
+        <h4>Syntax</h4>
+        <code>
+            getState(stateKey)
+        </code>
+        <h4>Parameters</h4>
+        <div class="indent">
+            <p><code inline>stateKey: string</code></p>
+            <p>
+                The key identifying the state value to be retrieved.
+            </p>
+        </div>
+        <h4>Return value</h4>
+        <p>The current value of the state as identified by the state key.</p>
+    </div>
+
+    <h3> <code inline>IkaComponent.setState()</code></h3>
+    <div class="indent">
+        <p>Sets the state of a component instance specified by a state key.</p>
+        <h4>Syntax</h4>
+        <code>
+            setState(stateKey, value)
+        </code>
+        <h4>Parameters</h4>
+        <div class="indent">
+            <p><code inline>stateKey: string</code></p>
+            <p>
+                The key identifying the state value to be set.
+            </p>
+            <p><code inline>value</code></p>
+            <p>
+                The value to be set on the state key.
+            </p>
+        </div>
+        <h4>Return value</h4>
+        <p>None.</p>
+    </div>
+    <h3> <code inline>IkaComponent.linkState()</code></h3>
+    <div class="indent">
+        Invokes a callback function passed in as an argument whenever a state's value is changed.
+        <h4>Syntax</h4>
+        <code>
+            linkState(stateKey, cb)<br>
+            linkState(stateKey, cb, linkedStateKey)
+        </code>
+        <h4>Parameters</h4>
+        <div class="indent">
+            <p><code inline>stateKey: string</code></p>
+            <p>
+                The state key to watch value changes on.
+            </p>
+            <p><code inline>cb: (this: IkaComponent, v) => any</code></p>
+            <p>
+                A callback function when the state's value is changed. The function passed in will receive one argument
+                that is the new state value, and have its <code inline>this</code> bound to the component instance.
+            </p>
+            <p><code inline>linkedStateKey: string</code></p>
+            <p>
+                The return value from the <code inline>cb</code> function will be assigned to the state key matching
+                <code inline>linkedStateKey</code>. This is equivalent to using <code inline>setState()</code> for the
+                linked state key.
+            </p>
+        </div>
+        <h4>Return value</h4>
+        <p>As defined by the function being invoked.</p>
+    </div>
+
+    <h3> <code inline>IkaComponent.invokeFunction()</code></h3>
+    <div class="indent">
+        <h4>Syntax</h4>
+        <code>
+            invokeFunction(methodName)<br>
+            invokeFunction(methodName, ...args)
+        </code>
+        <h4>Parameters</h4>
+        <div class="indent">
+            <p><code inline>methodName: string</code></p>
+            <p>
+                The key referencing a functions supplied in the <code inline>bundle.m</code> KV object, when defining
+                the component with <code inline>defineIkaComponent()</code>.
+            </p>
+            <p><code inline>args</code></p>
+            <p>
+                Additional parameters to be passed to the referenced function.
+            </p>
+        </div>
+        <h4>Return value</h4>
+        <p>As defined by the function being invoked.</p>
+    </div>
+
+    <h3> <code inline>IkaComponent.getIkaVersion()</code></h3>
+    <div class="indent">
+        <h4>Syntax</h4>
+        <code>getIkaVersion()</code>
+        <h4>Parameters</h4>
+        <p>None</p>
+        <h4>Return value</h4>
+        <p>A <code inline>string</code> of the Ika version number.</p>
+    </div>
+</div>
