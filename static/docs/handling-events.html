@@ -1,0 +1,68 @@
+<h1>Handling Events</h1>
+<p>👋 To dive right in, see this example's complete code via this <a
+        href="https://codepen.io/imdavidmin-the-flexboxer/pen/JjaNjmR">CodePen</a> link.</p>
+<p>
+    A key demand for front-end work is to respond to user input, or on the technical level, a DOM event. Whenever
+    practical, we recommend using native event handler interfaces, such as the <code inline>onclick</code> attribute or
+    the <code inline>attachEventListener()</code> method. </p>
+<p>
+    However, if you want to call a bundled method of an Ika component, it may be inpractical at times to manually
+    specify, from the child node level, which DOM node is the parent Ika component.
+</p>
+<h2>Using <code inline>&lt;ika-bf&gt;</code> for events</h2>
+<p>
+    An easy way to trigger a function call at the Ika component parent is to use the Ika provided component <code
+        inline>&lt;ika-bf&gt;</code>. Using the custom data attribute <code inline>data-*</code> on the <code
+        inline>&lt;ika-bf&gt;</code> allows you to catch events of the indicated type from any child of the element, and
+    invoke a function on the Ika component that has the key as indicated by the data attribute's value.
+</p>
+<p>
+    For example, you could write <code inline>&lt;ika-bf data-click="clickHandler"&gt;</code> to bind all click events
+    from child nodes of this element to the parent Ika component's <code inline>clickHandler()</code> method.
+</p>
+<p>
+    Under the hood, Ika relies on <a
+        href="https://developer.mozilla.org/en-US/docs/Learn/JavaScript/Building_blocks/Events#event_bubbling">event
+        bubbling</a> behaviour to invoke function calls requested by a child node. Each Ika component listens to special
+    events that bubble up in the DOM tree, and stop the event's propagation if the event has reached its intended
+    component. <code inline>&lt;ika-bf&gt;</code> components construct these special events and attach event listeners
+    to itself all based on HTML markup, saving you the time to write this logic in JavaScript manually.
+</p>
+
+<h2>Leaping past Ika components</h2>
+<p>
+    Occasionally, you may find it necessary to include an Ika component within the template of another Ika component,
+    and have some child element nested inside. If you want the child element to invoke a function on its "true" parent,
+    you can add the <code inline>leap</code> attribute. An integer value here tells Ika how many levels of Ika
+    components upwards in the DOM to skip over to reach the "true" parent.
+</p>
+<code>
+    <pre class="ht">&lt;data-handler&gt;</pre>
+    <pre class="ht">   &lt;presentation-container&gt;</pre>
+    <pre>       <span class="ht">&lt;ika-bf</span> <span class="attr">leap</span>=<span class="val">"1"</span> <span class="attr">data-click</span>=<span class="val">"clickHandler"</span><span class="ht">&gt;</span></pre>
+    <pre>           <span class="ht">&lt;button&gt;</span>Click me!<span class="ht">&lt;/button&gt;</span></pre>
+    <pre class="ht">   &lt;/presentation-container&gt;</pre>
+    <pre class="ht">&lt;/data-handler&gt;</pre>
+</code>
+
+<h2>Constructing events manually</h2>
+<p>
+    Since all Ika components extend <code inline>HTMLElement</code>, you can also attach an event listener on the
+    element, and dispatch <code inline>CustomEvent</code> or <code inline>Event</code> yourself.
+</p>
+<p>
+    However, remember that by default, events do not bubble through the shadow DOM barrier, unless you put in the <code
+        inline>composed: true</code> option when constructing the event. See the <a
+        href="https://developer.mozilla.org/en-US/docs/Web/API/Event/Event#syntax">syntax</a>
+    for the Event constructor. You should also make sure the event bubbles upwards, which is not the case by default.
+</p>
+
+
+<div class="onwardLinks">
+    <a href='./mapping-data.html' data-ika-target="docContent">
+        Back: Mapping data
+    </a>
+    <a href='./routing.html' data-ika-target="docContent">
+        Next: Routing
+    </a>
+</div>

@@ -1,0 +1,63 @@
+<h1>Code Splitting</h1>
+<p>
+    As your project grows bigger, you may find it easier to put your components in different files to have a more
+    readable and navigable code base. Ika supports this with the bundled <code inline>&lt;ika-import&gt;</code>
+    component.
+</p>
+
+<h2>Separating component code</h2>
+<p>
+    As Ika components are made in both HTML for front-end markup and in JavaScript for logic and component declaration,
+    code splitting works a little differently to HTML in JS type frameworks. Instead of importing another <code
+        inline>.js</code> chunk with a <code inline>&lt;script&gt;</code> element, <code
+        inline>&lt;ika-import&gt;</code> would point to a resource URL that contains an HTML document fragment.
+</p>
+<p>
+    <code inline>&lt;ika-import&gt;</code> would parse the HTML document, move all <code inline>&lt;template&gt;</code>
+    elements contained inside a special <code inline>&lt;ika:templates&gt;</code> element to the current page, and all
+    additional <code inline>&lt;ika-import&gt;</code> elements contained in the document, and execute <code
+        inline>&lt;script&gt;</code> elements.
+</p>
+<p>
+    So, to import a <code inline>&lt;hello-world&gt;</code> element that has been code split, you might see the
+    following in a <code inline>hello-world.html</code> resource:
+</p>
+<code>
+    <pre class="ht">&lt;ika:templates&gt;</pre>
+    <pre>    <span class="ht">&lt;template</span> <span class="attr">id</span>=<span class="val">"hello-world"</span><span class="ht">&gt;</span></pre>
+    <pre>        Hello, world!</pre>
+    <pre class="ht">    &lt;/template&gt;</pre>
+    <pre class="ht">&lt;/ika:templates&gt;
+
+    </pre>
+    <pre><span class="ht">&lt;script</span> <span class="attr">type</span>=<span class="val">"module"</span><span class="ht">&gt;</span></pre>
+    <pre>   <span class="fn">import</span> { <span class="var">defineIkaComponent</span> } <span class="fn">from</span> <span class="val">'https://unpkg.com/ikajs'</span>;</pre>
+    <pre>   <span class="fn">defineIkaComponent</span>(<span class="val">'hello-world'</span>)</pre>
+    <pre><span class="ht">&lt;/script&gt;</span></pre>
+</code>
+<p>On the main document, <code inline>index.html</code>, the code looks like the following:</p>
+<code>
+    <pre><span class="ht">&lt;ika-import</span> <span class="attr">src</span>=<span class="val">"/components/hello-world.html"</span><span class="ht">&gt;</span></pre>
+    <pre class="ht">&lt;hello-world&gt;&lt;/hello-world&gt;</pre>
+</code>
+
+<h2>Manually importing components</h2>
+<p>
+    If you do not use the <code inline>&lt;ika-import&gt;</code> component, you can do all steps manually in your
+    JavaScript code. You'll need to add your component's template to the <code inline>&lt;ika:templates&gt;</code>
+    elementon your main page, wherever you load it from, and then declare the component in JavaScript.
+</p>
+<p>
+    Note that the <code inline>&lt;ika-import&gt;</code> component also hooks into a <code inline>ImportRegistry</code>
+    object to handle conditions where the template node is not yet added to the DOM before a component declaration via
+    <code inline>defineIkaComponent()</code> is executed. If you import templates manually, make sure ordering issues
+    are avoided.
+</p>
+
+
+<div class="onwardLinks">
+    <a href='./routing.html' data-ika-target="docContent">
+        Back: Routing
+    </a>
+    <a style="opacity: 0"></a>
+</div>

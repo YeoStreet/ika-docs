@@ -1,10 +1,10 @@
 <h1>Routing</h1>
-<h2></h2>
 <p>
     Wherever possible, we recommend using the <code inline>&lt;a&gt;</code> element to link to different parts of your
     site. This is not only helpful by bringing in the default UI behaviour for links, it is also semantically helpful
     for SEO.
 </p>
+<h2>Routing for SPAs</h2>
 <p>
     However, if you are making a single page app, the navigation to another address could be unhelpful for state
     management. Ika helps resolve this issue with built-in routing functionality. At the document level, Ika attaches an
@@ -18,3 +18,38 @@
     question. Read more about the <code inline>&lt;ika-route&gt;</code> element's specifications <a
         href="./components.html" data-ika-target="docContent">here</a>.
 </p>
+<p>
+    For example, you might have this on your app's <code inline>index.html</code> file:
+</p>
+<code>
+    <pre class="ht">&lt;nav&gt;</pre>
+    <pre>   <span class="ht">&lt;a</span> <span class="attr">href</span>=<span class="val">"/intro.html"</span> <span class="attr">data-ika-target</span>=<span class="val">"main"</span><span class="ht">&gt;</span>Intro<span class="ht">&lt;/a&gt;</span></pre>
+    <pre class="ht">&lt;/nav&gt;</pre>
+    <pre><span class="ht">&lt;ika-route</span> <span class="attr">key</span>=<span class="val">"main"</span><span class="ht">&gt;&lt;/ika-route&gt;</span></pre> 
+</code>
+<p>
+    When the user clicks the "Intro" link, the <code inline>&lt;ika-route&gt;</code> component will change load all
+    content from <code inline>intro.html</code> as its child elements.
+</p>
+<p>
+    Alternatively, to trigger a page navigation through JavaScript, use <code inline>setRoute(path: string)</code> on the <code
+        inline>&lt;ika-route&gt;</code> element to set the resource path.
+</p>
+<h2>Things to note</h2>
+<p>
+    The <code inline>&lt;ika-route&gt;</code> component will load in new templates for Ika components if they are
+    present on the resource. These template elements are added to the <code inline>&lt;ika:templates&gt;</code> element
+    elsewhere on the page. There is a <code inline>MutationObserver</code> placed on <code
+        inline>&lt;ika-route&gt;</code> to monitor if all nodes rendered from the routing event has been removed. If so,
+    the imported template elements will also be removed from <code inline>&lt;ika:templates&gt;</code>'s child elements.
+</p>
+
+
+<div class="onwardLinks">
+    <a href='./handling-events.html' data-ika-target="docContent">
+        Back: Handling events
+    </a>
+    <a href='./code-splitting.html' data-ika-target="docContent">
+        Next: Code splitting
+    </a>
+</div>
