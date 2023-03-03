@@ -8,50 +8,78 @@
     --theme-primary-text: #fff;
     --theme-secondary: #2e2e3a;
     --theme-secondary-text: #fff;
+    --main-height: calc(100vh - var(--header-height));
+    --header-height: 3.5rem;
+    --footer-height: 2rem;
 }
-body{
+
+body {
     margin: 0
 }
 
-code,
-.code {
-    font-family: monospace;
-    background: var(--theme-code);
-    padding: 0.15rem 0.25rem;
-    border-radius: 4px;
-}
-
-div.code {
-    border: 1px solid #999;
-    border-radius: 3px;
-    background: var(--theme-code);
-    padding: 0.5rem 1rem;
-    margin: 1rem 0.5rem;
-    font-size: 0.875rem;
-}
-
-.aside {
-    background: rgb(239, 241, 229);
-    padding: 0.5rem;
-    margin: 1rem;
-    font-size: 0.875rem;
-    border: 1px solid rgb(179, 180, 136);
-    border-radius: 5px;
-}
-
-.navLink {
-    font-weight: 600;
+footer {
     display: flex;
-    padding: 0.5rem;
-    margin: 0.5rem;
-    transition: all 0.5s;
-    border-radius: 0;
-    border: 1px solid #00000000;
-    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    position: fixed;
+    bottom: 0.5rem;
+    left: 2rem;
+    padding: 0 2rem;
+    width: calc(100vw - 4rem);
+    height: var(--footer-height);
+    font-size: 0.8rem;
+    color: #ccc;
+    background: #00000080;
+    border-radius: 1rem;
+    margin: 5px auto;
+    box-sizing: border-box;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    text-align: center;
 }
 
-.navLink:hover {
-    background: var(--theme-primary-lighter);
-    border-radius: 3px;
-    border-color: #00000020
+footer a {
+    color: #fff
+}
+
+header {
+    background: #eee;
+    display: flex;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    height: var(--header-height)
+}
+
+header a.homeLink {
+    display: inline-block;
+    margin: 0 1rem;
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    border: 1px solid transparent;
+    text-decoration: none;
+    color: #333;
+    box-sizing: border-box;
+    transition: border 0.1s;
+}
+
+@media (hover: hover) and (pointer: fine) {
+    header a.homeLink:hover {
+        border: 1px solid #333;
+    }
+}
+
+@media (min-width: 600px) {
+    footer {
+        width: 400px;
+        left: calc(50vw - 200px);
+    }
+}
+
+ika-route[key="main"] {
+    height: var(--main-height);
+    display: block;
+    overflow-y: auto;
+    overflow-x: none;
 }

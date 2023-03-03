@@ -32,8 +32,34 @@
     content from <code inline>intro.html</code> as its child elements.
 </p>
 <p>
-    Alternatively, to trigger a page navigation through JavaScript, use <code inline>setRoute(path: string)</code> on the <code
-        inline>&lt;ika-route&gt;</code> element to set the resource path.
+    Alternatively, to trigger a page navigation through JavaScript, use <code inline>setRoute(path: string)</code> on
+    the <code inline>&lt;ika-route&gt;</code> element to set the resource path.
+</p>
+<h2>Advanced routing configuration</h2>
+<p>
+    You can set configuration for the Ika built-in routing functionality with the <code
+        inline>window.IKA_ROUTE_CONFIG</code> KV object. Options include:
+<ul>
+    <li>
+        <code inline>resourceDir</code>: Prefix this string value to all routing paths.
+        <p>
+            For example, you might have the route <code inline>/blog.html</code>, but it is only the content for the
+            blog page, and does not contain the app root for your SPA. To prevent serving this HTML document directly,
+            you may choose to put it at <code inline>/static/blog.html</code>. However, you still want the <code
+                inline>href</code> attribute on anchor elements to read as <code inline>/blog.html</code>, for SEO
+            purposes. In this case, <code inline>resourceDir</code> value of <code inline>/static</code> will be
+            suitable.
+        </p>
+    </li>
+    <li>
+        <code inline>rules</code>: An array of rule objects, which are KVs of path and resolution values.
+        <p>
+            Rule objects take form of <code inline>{ path: string | RegExp, res: string }</code>. Routing paths matching
+            the <code inline>path</code> value will be routed to the <code inline>res</code> value instead. Note <code
+                inline>resourceDir</code> prefix will not be applied to the <code inline>res</code> value.
+        </p>
+    </li>
+</ul>
 </p>
 <h2>Things to note</h2>
 <p>

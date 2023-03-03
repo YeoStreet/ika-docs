@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Ika - create simply.</title>
     <script type="module" src="./ika.js"></script>
     <link rel="stylesheet" href="styles.css">
@@ -23,28 +24,6 @@
             ]
         }
     </script>
-    <style>
-        header {
-            background: #eee;
-            display: block;
-        }
-
-        header a.homeLink {
-            display: inline-block;
-            margin: 0.5rem 1rem;
-            padding: 0.5rem 1rem;
-            font-size: 1.25rem;
-            border: 1px solid transparent;
-            text-decoration: none;
-            color: #333;
-            box-sizing: border-box;
-            transition: border 0.1s;
-        }
-
-        header a.homeLink:hover {
-            border: 1px solid #333;
-        }
-    </style>
 </head>
 
 <header>
@@ -55,5 +34,15 @@
 <body>
     <ika-route key="main"> </ika-route>
 </body>
+<footer>
+    <div>
+        <span>Copyright © <span id="curYear"></span> <a href="https://yeostreet.co.uk/?ref=ika">Yeo Street</a></span>
+    </div>
+    <div>Uicons by <a href="https://www.flaticon.com/uicons">Flaticon</a></div>
+
+</footer>
+<script>
+    document.querySelector('#curYear').textContent = new Date(Date.now()).getFullYear()
+</script>
 
 </html>

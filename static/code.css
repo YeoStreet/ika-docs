@@ -1,0 +1,53 @@
+code {
+    text-align: left;
+    padding: 1rem;
+    background: var(--theme-secondary);
+    color: var(--theme-secondary-text);
+    font-family: monospace;
+    border-radius: 4px;
+    max-width: 100%;
+    box-sizing: border-box;
+}
+
+code:not([inline]) {
+    min-width: 300px;
+    width: 600px;
+    margin: auto;
+    display: block;
+    overflow: auto;
+}
+
+code pre {
+    margin: 3px
+}
+
+code[inline] {
+    color: #333;
+    padding: 0 0.25rem;
+    background: #e8e8e8;
+}
+
+code .comment {
+    color: #5da157
+}
+
+code .ht {
+    color: #a5975b
+}
+
+code .fn,
+code .attr {
+    color: #e6c22f
+}
+
+code .var {
+    color: #73a1cf
+}
+
+code .rk {
+    color: #4c78a3
+}
+
+code .val {
+    color: #6daf7d;
+}

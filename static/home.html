@@ -21,22 +21,6 @@
         text-align: center;
     }
 
-    code {
-        text-align: left;
-        display: inline-block;
-        padding: 1rem;
-        background: var(--theme-secondary);
-        color: var(--theme-secondary-text)
-    }
-
-    code.inline {
-        padding: 3px 5px;
-    }
-
-    code pre {
-        margin: 3px
-    }
-
     .section {
         padding: 3rem
     }
@@ -47,7 +31,8 @@
         border-bottom: 2px solid #ffffff80;
         text-transform: uppercase;
         font-size: 1.125rem;
-        width: fit-content
+        width: fit-content;
+        width: -moz-fit-content;
     }
 
     .card {
@@ -62,7 +47,8 @@
         gap: 2rem;
         justify-items: center;
         margin: 2rem auto;
-        width: fit-content
+        width: fit-content;
+        width: -moz-fit-content;
     }
 
     .ctaContainer {
@@ -88,23 +74,29 @@
         text-decoration: none;
     }
 
-    .ctaContainer>*:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 7px 0 #00000060;
-    }
+
 
     .ctaContainer button.primaryCTA {
         background: #f8f8f8;
         color: #000
     }
 
+    @media (hover: hover) and (pointer: fine) {
+        .ctaContainer>*:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 7px 0 #00000060;
+        }
+    }
+
     @media (min-width: 600px) {
         .cardContainer {
             grid-template-columns: 1fr 1fr 1fr;
-
         }
     }
 </style>
+
+<link rel="stylesheet" href="/static/code.css">
+
 <div class="container">
     <div class="spotlight">
         <h1 class="bannerText">
@@ -143,20 +135,26 @@
         <h2 style="text-align: center;">Get started</h2>
         <p>Add the component template to your HTML:</p>
         <code>
-            <pre>&lt;ika:templates&gt;</pre>
-            <pre>   &lt;template id="hello-world"&gt;</pre>
+            <pre><span class="ht">&lt;ika:templates&gt;</span></pre>
+            <pre>   <span class="ht">&lt;template</span> <span class="attr">id</span>=<span class="val">"hello-world"</span><span class="ht">&gt;</span></pre>
             <pre>       Hello, world!</pre>
-            <pre>   &lt;/template&gt;</pre>
-            <pre>&lt;/ika:templates&gt;</pre>
+            <div class="ht">
+                <pre>   &lt;/template&gt;</pre>
+                <pre>&lt;/ika:templates&gt;</pre>
+            </div>
         </code>
 
         <p>Then, declare the component through JS:</p>
         <code>
-            <pre>&lt;script type="module"&gt;</pre>
-            <pre>   import { defineIkaComponent } from 'https://unpkg.com/ikajs';</pre>
-            <pre>   defineIkaComponent('hello-world')</pre>
-            <pre>&lt;/script&gt;</pre>
+            <pre><span class="ht">&lt;script</span> <span class="attr">type</span>=<span class="val">"module"</span><span class="ht">&gt;</span></pre>
+            <pre>   <span class="fn">import</span> { <span class="var">defineIkaComponent</span> } <span class="fn">from</span> <span class="val">'https://unpkg.com/ikajs'</span>;</pre>
+            <pre>   <span class="fn">defineIkaComponent</span>(<span class="val">'hello-world'</span>)</pre>
+            <pre><span class="ht">&lt;/script&gt;</span></pre>
         </code>
-        <p>Done! Use your component as <code class="inline">&lt;hello-world&gt;</code> anywhere on your page.</p>
+        <p>Done! Use your component as <code inline>&lt;hello-world&gt;</code> anywhere on your page.</p>
+    </div>
+    <div>
+        <h2>Contact</h2>
+        <a><img></a>
     </div>
 </div>

@@ -2,10 +2,6 @@ h1 {
     font-size: 1.5rem;
 }
 
-.docsContainer {
-    display: flex;
-}
-
 nav h1 {
     text-transform: lowercase;
     padding: 0 1rem 0.5rem 0;
@@ -15,12 +11,85 @@ nav h1 {
 
 div.navBg {
     background: #f8f8f8;
+    position: sticky;
+    top: 0;
+    width: 100vw;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+div.navBg button {
+    cursor: pointer;
+    background: #00000008;
+    padding: 0.5rem 1rem;
+    border: 0;
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    width: -moz-fit-content;
+    gap: 0.5rem;
+}
+
+div.docWrapper {
+    width: 100%;
+}
+
+div.mainWrapper {
+    height: 100%;
+    overflow: auto;
+}
+
+@media (min-width: 1024px) {
+    div.navBg {
+        height: 100%;
+        padding: 0;
+        width: fit-content;
+        width: -moz-fit-content;
+    }
+
+    div.navBg nav {
+        display: flex;
+        flex-direction: column;
+        width: max-content;
+        height: var(--main-height);
+        box-sizing: border-box;
+    }
+
+    div.navBg button.toggle {
+        display: none;
+    }
+
+    div.docWrapper {
+        display: flex
+    }
+}
+
+div.navBg button img {
+    height: 1rem;
+    width: 1rem;
+}
+
+div.navBg[show] {
+    height: 100%;
+    padding: 0;
+}
+
+div.navBg[show] nav {
+    display: flex;
+    flex-direction: column;
+    min-height: var(--main-height);
+    box-sizing: border-box;
+    margin: auto
+}
+
+div.navBg[show] button.expand {
+    display: none
 }
 
 nav {
     max-width: 400px;
     padding: 2rem 3rem;
-    display: grid;
+    display: none;
     gap: 0.5rem;
 }
 
@@ -45,78 +114,28 @@ nav ul>li>a {
     transition: all 0.2s;
 }
 
-nav ul>li>a:hover {
-    color: var(--theme-primary);
+@media (hover: hover) and (pointer: fine) {
+    nav ul>li>a:hover {
+        color: var(--theme-primary);
+    }
 }
 
-body {
-    margin: 0
+nav>i {
+    opacity: 0.5;
+    flex-grow: 1;
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: var(--footer-height);
 }
 
 main {
-    margin: 2rem;
-    border-radius: 5px;
     background: #f8f8f8;
-    padding: 2rem 3rem;
-    width: 100%;
+    padding: 1rem 3rem calc(2rem + var(--footer-height) + 0.5rem);
     box-shadow: 0 0 10px 0px #00000040;
 }
 
 main p {
     line-height: 1.5rem;
-}
-
-code {
-    border-radius: 3px;
-    text-align: left;
-    display: inline-block;
-    padding: 1rem;
-    background: var(--theme-secondary);
-    color: var(--theme-secondary-text)
-}
-
-code:not([inline]) {
-    min-width: 300px;
-    max-width: 600px;
-    margin: auto;
-    display: block;
-    overflow: auto;
-}
-
-code pre {
-    margin: 3px
-}
-
-code[inline] {
-    color: #333;
-    padding: 0 0.25rem;
-    background: #e8e8e8;
-    line-height: 1.25rem;
-}
-
-code .comment {
-    color: #5da157
-}
-
-code .ht {
-    color: #a5975b
-}
-
-code .fn,
-code .attr {
-    color: #e6c22f
-}
-
-code .var {
-    color: #73a1cf
-}
-
-code .rk {
-    color: #4c78a3
-}
-
-code .val {
-    color: #6daf7d;
 }
 
 
@@ -128,33 +147,58 @@ main h2 {
 
 div.onwardLinks {
     display: flex;
+    gap: 1rem;
+    flex-direction: column-reverse;
     justify-content: space-between;
     margin-top: 2rem;
     border-top: 1px solid #00000010;
     padding: 2rem 0 0;
 }
 
-
 div.onwardLinks>a {
     background: #f0f0f0;
-    padding: 1.5rem;
     font-size: 1rem;
-    width: max-content;
+    text-align: center;
+    padding: 1rem;
+    border-bottom: 1px solid;
     display: block;
     color: #333;
     text-decoration: none;
     transition: all 0.2s;
 }
 
-div.onwardLinks>a:first-of-type:hover {
-    transform: translateX(3px);
-}
-div.onwardLinks>a:last-of-type:hover {
-    transform: translateX(-3px);
-}
-div.onwardLinks>a:first-of-type{
-    border-right: 1px solid;
-}
-div.onwardLinks>a:last-of-type{
-    border-left: 1px solid;
+@media (min-width: 600px) {
+    div.onwardLinks {
+        flex-direction: row;
+    }
+
+    div.onwardLinks>a {
+        padding: 1.5rem;
+        width: max-content;
+        border-bottom: 0;
+    }
+
+    main {
+        margin: 2rem;
+        border-radius: 5px;
+    }
+
+    div.onwardLinks>a:first-of-type {
+        border-right: 1px solid;
+    }
+
+    div.onwardLinks>a:last-of-type {
+        border-left: 1px solid;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        div.onwardLinks>a:first-of-type:hover {
+            transform: translateX(3px);
+        }
+
+        div.onwardLinks>a:last-of-type:hover {
+            transform: translateX(-3px);
+        }
+    }
+
 }

@@ -1,15 +1,20 @@
 <link rel="stylesheet" href="/static/docs/index.css">
+<link rel="stylesheet" href="/static/code.css">
 
-<div class="docsContainer">
+<div class="docWrapper">
     <div class="navBg">
-        <nav>
-            
+        <nav onclick="event.target.hasAttribute('data-ika-target') && this.parentElement.removeAttribute('show')">
+            <button class="toggle" onclick="document.querySelector('div.navBg').toggleAttribute('show')">
+                <img aria-label="Close navigation menu" src="/static/icons/arrow-small-left.svg">
+                Back
+            </button>
             <h1>Guides</h1>
             <ul>
                 <li><a href='./quick-start.html' data-ika-target="docContent">Quick Start</a></li>
                 <li><a href='./introduction.html' data-ika-target="docContent">Introduction</a></li>
                 <li><a href='./templating.html' data-ika-target="docContent">Templating</a></li>
-                <li><a href='./state-and-data-binding.html' data-ika-target="docContent">State and Data Binding</a></li>
+                <li><a href='./state-and-data-binding.html' data-ika-target="docContent">State and Data Binding</a>
+                </li>
                 <li><a href='./mapping-data.html' data-ika-target="docContent">Mapping Data</a></li>
                 <li><a href='./handling-events.html' data-ika-target="docContent">Handling Events</a></li>
                 <li><a href='./routing.html' data-ika-target="docContent">Routing</a></li>
@@ -19,14 +24,21 @@
             <ul>
                 <li><a href="./components.html" data-ika-target="docContent">Bundled Components</a></li>
                 <li><a href="./defineIkaComponent.html" data-ika-target="docContent">defineIkaComponent()</a></li>
-                <li><a href="./class-ikacomponent.html" data-ika-target="docContent"><i>class</i> IkaComponent</a></li>
+                <li><a href="./class-ikacomponent.html" data-ika-target="docContent"><i>class</i> IkaComponent</a>
+                </li>
             </ul>
+            <i>v0.2.0</i>
         </nav>
-        <i style="opacity: 0.5; margin: 5px">Unversioned</i>
+        <button class="toggle expand" onclick="document.querySelector('div.navBg').toggleAttribute('show');">
+            <img aria-label="Expand navigation menu" src="/static/icons/list.svg">
+            Navigation
+        </button>
+    </div>
+    <div class="mainWrapper">
+        <main>
+            <ika-route key="docContent" src="/static/docs/quick-start.html">
+            </ika-route>
+        </main>
     </div>
 
-    <main>
-        <ika-route key="docContent" src="/static/docs/quick-start.html">
-        </ika-route>
-    </main>
 </div>
